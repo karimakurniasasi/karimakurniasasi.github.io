@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Karima Portfolio</title>
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+      scroll-behavior:smooth;
+    }
+
+    body{
+      font-family:'Poppins', sans-serif;
+      background:#0f172a;
+      color:white;
+      overflow-x:hidden;
+    }
+
+    a{
+      text-decoration:none;
+      color:inherit;
+    }
+
+    section{
+      padding:100px 10%;
+    }
+
+    /* NAVBAR */
+    nav{
+      width:100%;
+      position:fixed;
+      top:0;
+      left:0;
+      padding:20px 10%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      backdrop-filter:blur(12px);
+      background:rgba(15,23,42,0.6);
+      z-index:1000;
+    }
+
+    nav h1{
+      font-size:1.3rem;
+      font-weight:700;
+      color:#60a5fa;
+    }
+
+    nav ul{
+      display:flex;
+      gap:30px;
+      list-style:none;
+    }
+
+    nav ul li a{
+      color:#cbd5e1;
+      transition:.3s;
+      font-size:.95rem;
+    }
+
+    nav ul li a:hover{
+      color:#60a5fa;
+    }
+
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:60px;
+      position:relative;
+    }
+
+    .hero::before{
+      content:'';
+      position:absolute;
+      width:400px;
+      height:400px;
+      background:#2563eb;
+      filter:blur(150px);
+      opacity:.25;
+      top:-100px;
+      right:-100px;
+      z-index:-1;
+    }
+
+    .hero-text{
+      flex:1;
+    }
+
+    .hero-text span{
+      color:#60a5fa;
+      font-weight:500;
+    }
+
+    .hero-text h2{
+      font-size:4rem;
+      line-height:1.1;
+      margin:15px 0;
+    }
+
+    .hero-text p{
+      color:#cbd5e1;
+      max-width:550px;
+      line-height:1.8;
+      margin-bottom:35px;
+    }
+
+    .btn-group{
+      display:flex;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:14px 28px;
+      border-radius:14px;
+      transition:.3s;
+      font-weight:500;
+    }
+
+    .btn-primary{
+      background:#2563eb;
+      color:white;
+    }
+
+    .btn-primary:hover{
+      background:#1d4ed8;
+      transform:translateY(-3px);
+    }
+
+    .btn-outline{
+      border:1px solid rgba(255,255,255,0.2);
+      color:#e2e8f0;
+    }
+
+    .btn-outline:hover{
+      background:white;
+      color:#0f172a;
+    }
+
+    .hero-image{
+      flex:1;
+      display:flex;
+      justify-content:center;
+    }
+
+    .hero-card{
+      width:320px;
+      height:420px;
+      border-radius:30px;
+      background:linear-gradient(145deg,#1e293b,#0f172a);
+      border:1px solid rgba(255,255,255,0.08);
+      padding:25px;
+      position:relative;
+      overflow:hidden;
+      box-shadow:0 20px 50px rgba(0,0,0,.4);
+    }
+
+    .hero-card::before{
+      content:'';
+      position:absolute;
+      width:200px;
+      height:200px;
+      background:#3b82f6;
+      filter:blur(80px);
+      top:-40px;
+      right:-40px;
+      opacity:.35;
+    }
+
+    .hero-card img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      border-radius:20px;
+    }
+
+    /* SECTION TITLE */
+    .title{
+      font-size:2.3rem;
+      margin-bottom:50px;
+    }
+
+    .title span{
+      color:#60a5fa;
+    }
+
+    /* ABOUT */
+    .about-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:25px;
+    }
+
+    .about-card{
+      background:#111c34;
+      border-radius:25px;
+      padding:30px;
+      border:1px solid rgba(255,255,255,0.05);
+      transition:.3s;
+    }
+
+    .about-card:hover{
+      transform:translateY(-8px);
+      border-color:#3b82f6;
+    }
+
+    .about-card h3{
+      margin-bottom:15px;
+      color:#60a5fa;
+    }
+
+    .about-card p{
+      color:#cbd5e1;
+      line-height:1.7;
+      font-size:.95rem;
+    }
+
+    /* WORKS */
+    .works-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:25px;
+    }
+
+    .work-card{
+      background:#111c34;
+      border-radius:25px;
+      overflow:hidden;
+      transition:.4s;
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .work-card:hover{
+      transform:translateY(-10px);
+    }
+
+    .work-card img{
+      width:100%;
+      height:220px;
+      object-fit:cover;
+    }
+
+    .work-content{
+      padding:25px;
+    }
+
+    .work-content h3{
+      margin-bottom:10px;
+    }
+
+    .work-content p{
+      color:#cbd5e1;
+      font-size:.92rem;
+      line-height:1.7;
+    }
+
+    /* EXPERIENCE */
+    .timeline{
+      border-left:2px solid rgba(255,255,255,0.15);
+      padding-left:30px;
+      display:flex;
+      flex-direction:column;
+      gap:40px;
+    }
+
+    .timeline-item{
+      position:relative;
+    }
+
+    .timeline-item::before{
+      content:'';
+      position:absolute;
+      width:15px;
+      height:15px;
+      background:#60a5fa;
+      border-radius:50%;
+      left:-38px;
+      top:5px;
+    }
+
+    .timeline-item h3{
+      margin-bottom:8px;
+    }
+
+    .timeline-item span{
+      color:#60a5fa;
+      font-size:.9rem;
+    }
+
+    .timeline-item p{
+      color:#cbd5e1;
+      margin-top:10px;
+      line-height:1.7;
+    }
+
+    /* CONTACT */
+    .contact-box{
+      background:linear-gradient(145deg,#1e293b,#111827);
+      border-radius:30px;
+      padding:60px;
+      text-align:center;
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .contact-box h2{
+      font-size:2.5rem;
+      margin-bottom:20px;
+    }
+
+    .contact-box p{
+      color:#cbd5e1;
+      margin-bottom:30px;
+      line-height:1.8;
+    }
+
+    footer{
+      padding:30px;
+      text-align:center;
+      color:#94a3b8;
+      border-top:1px solid rgba(255,255,255,0.08);
+    }
+
+    /* RESPONSIVE */
+    @media(max-width:900px){
+
+      nav ul{
+        display:none;
+      }
+
+      .hero{
+        flex-direction:column-reverse;
+        text-align:center;
+        padding-top:120px;
+      }
+
+      .hero-text p{
+        margin:auto auto 35px;
+      }
+
+      .btn-group{
+        justify-content:center;
+      }
+
+      .hero-text h2{
+        font-size:3rem;
+      }
+
+      .contact-box{
+        padding:40px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <h1>karima.</h1>
+
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+
+    <div class="hero-text">
+      <span>Social Media Designer ✦ Creative Person ✦ Gen Z Style</span>
+
+      <h2>
+        Designing visuals<br>
+        that feel alive.
+      </h2>
+
+      <p>
+        Hai! Aku Karima — seorang social media designer yang suka bikin visual clean, modern, playful, dan relate untuk Gen Z. Fokusku ada di branding visual, konten kampus, campaign social media, dan desain yang punya vibes fresh tapi tetap impactful.
+      </p>
+
+      <div class="btn-group">
+        <a href="#works" class="btn btn-primary">See My Works</a>
+        <a href="#contact" class="btn btn-outline">Let's Collaborate</a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <div class="hero-card">
+        <!-- GANTI FOTO -->
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop" alt="profile">
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+
+    <h2 class="title">About <span>Me</span></h2>
+
+    <div class="about-grid">
+
+      <div class="about-card">
+        <h3>Creative Direction</h3>
+        <p>
+          Suka eksplor visual modern, bold typography, dan layout yang engaging untuk audience Gen Z.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h3>Social Media Design</h3>
+        <p>
+          Membuat konten Instagram, campaign visual, feed branding, dan promosi yang tidak terasa membosankan.
+        </p>
+      </div>
+
+      <div class="about-card">
+        <h3>Motion & Visual</h3>
+        <p>
+          Tertarik pada visual dinamis, storytelling, dan desain yang punya emosi dan personality.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- WORKS -->
+  <section id="works">
+
+    <h2 class="title">Featured <span>Works</span></h2>
+
+    <div class="works-grid">
+
+      <div class="work-card">
+        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1200&auto=format&fit=crop" alt="">
+        <div class="work-content">
+          <h3>Campus Campaign</h3>
+          <p>
+            Visual campaign social media untuk promosi event dan branding kampus dengan gaya Gen Z.
+          </p>
+        </div>
+      </div>
+
+      <div class="work-card">
+        <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?q=80&w=1200&auto=format&fit=crop" alt="">
+        <div class="work-content">
+          <h3>Instagram Design</h3>
+          <p>
+            Feed design modern dengan visual clean, colorful, dan engaging untuk audience muda.
+          </p>
+        </div>
+      </div>
+
+      <div class="work-card">
+        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop" alt="">
+        <div class="work-content">
+          <h3>Creative Branding</h3>
+          <p>
+            Mengembangkan identitas visual dan konsep kreatif untuk meningkatkan engagement.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+
+    <h2 class="title">My <span>Journey</span></h2>
+
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <span>2024 — Now</span>
+        <h3>Social Media Designer</h3>
+        <p>
+          Fokus membuat konten visual kampus, campaign digital, dan branding visual yang lebih fresh untuk Gen Z.
+        </p>
+      </div>
+
+      <div class="timeline-item">
+        <span>Creative Passion</span>
+        <h3>Visual Storytelling</h3>
+        <p>
+          Suka mengeksplor desain yang tidak hanya estetik, tapi juga punya mood dan cerita.
+        </p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+
+    <div class="contact-box">
+
+      <h2>Let’s Create Something Cool ✨</h2>
+
+      <p>
+        Terbuka untuk freelance, collaboration, atau project kreatif lainnya.
+      </p>
+
+      <div class="btn-group" style="justify-content:center;">
+        <a href="https://instagram.com/" target="_blank" class="btn btn-primary">
+          Instagram
+        </a>
+
+        <a href="mailto:yourmail@gmail.com" class="btn btn-outline">
+          Email Me
+        </a>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    © 2026 Karima Portfolio — Designed with vibes & creativity.
+  </footer>
+
+</body>
+</html>
