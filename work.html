@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Portfolio karya Karima Kurnia Sasi — Graphic Designer, Video Editor, Illustrator.">
+  <title>Karya — Karima Kurnia Sasi</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:#0b1120; --surface:#111c34; --surface2:#1a2540;
+      --blue:#3b82f6; --blue-lt:#60a5fa; --blue-dim:rgba(59,130,246,.12);
+      --text:#e2e8f0; --muted:#94a3b8; --border:rgba(255,255,255,.07);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    a    { text-decoration:none; color:inherit; }
+
+    /* ── NAVBAR ── */
+    nav {
+      width:100%; position:fixed; top:0; left:0; z-index:1000;
+      display:grid; grid-template-columns:auto 1fr auto;
+      align-items:center; gap:16px;
+      padding:14px 5%;
+      backdrop-filter:blur(16px);
+      background:rgba(11,17,32,.75);
+      border-bottom:1px solid var(--border);
+      transition:.3s;
+    }
+    nav.scrolled { background:rgba(11,17,32,.97); }
+    .nav-logo {
+      font-size:1.35rem; font-weight:800; color:var(--blue-lt);
+      letter-spacing:-.03em; white-space:nowrap;
+    }
+    .nav-cats {
+      display:flex; gap:4px; justify-content:center;
+      overflow-x:auto; scrollbar-width:none;
+      -webkit-overflow-scrolling:touch; padding:2px 0;
+      min-width:0;
+    }
+    .nav-cats::-webkit-scrollbar { display:none; }
+    .nav-cat {
+      white-space:nowrap; padding:6px 15px; border-radius:100px;
+      font-size:.78rem; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:.2s; flex-shrink:0;
+      background:transparent; border:1px solid transparent;
+      color:var(--muted); text-decoration:none;
+    }
+    .nav-cat:hover  { color:var(--blue-lt); border-color:rgba(96,165,250,.3); }
+    .nav-cat.active { background:var(--blue); color:white; border-color:var(--blue); }
+    .nav-right { display:flex; align-items:center; gap:10px; }
+    .lang-toggle { display:flex; background:var(--surface); border-radius:9px; overflow:hidden; border:1px solid var(--border); }
+    .lang-btn {
+      padding:5px 12px; font-size:.75rem; font-weight:700;
+      font-family:inherit; background:transparent; border:none;
+      color:var(--muted); cursor:pointer; transition:.2s;
+    }
+    .lang-btn.active { background:var(--blue); color:white; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      padding:0 10% 28px;
+      display:flex; gap:6px; flex-wrap:wrap;
+    }
+    .filter-btn {
+      white-space:nowrap; padding:7px 16px; border-radius:100px;
+      font-size:.78rem; font-weight:600; font-family:inherit;
+      cursor:pointer; transition:.2s;
+      background:transparent; border:1px solid var(--border);
+      color:var(--muted);
+    }
+    .filter-btn:hover  { color:var(--blue-lt); border-color:rgba(96,165,250,.3); }
+    .filter-btn.active { background:var(--blue); color:white; border-color:var(--blue); }
+
+    /* ── MAIN ── */
+    .page-header {
+      padding:110px 10% 24px;
+    }
+    .section-label {
+      font-size:.78rem; font-weight:700; color:var(--blue-lt);
+      letter-spacing:.15em; text-transform:uppercase; margin-bottom:10px;
+    }
+    .page-title {
+      font-size:clamp(2rem,4vw,3rem); font-weight:800;
+      letter-spacing:-.02em; line-height:1.15;
+    }
+    .page-title .accent { color:var(--blue-lt); }
+    .cat-desc {
+      color:var(--muted); font-size:.95rem; line-height:1.8; margin-top:12px; max-width:540px;
+    }
+
+    /* ── PORTFOLIO GRID ── */
+    .port-section { padding:0 10% 100px; }
+    .port-grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+      gap:20px;
+    }
+    .port-item {
+      border-radius:20px; overflow:hidden;
+      background:var(--surface); border:1px solid var(--border);
+      transition:.4s; cursor:pointer;
+    }
+    .port-item:hover {
+      transform:translateY(-8px); border-color:var(--blue);
+      box-shadow:0 20px 40px rgba(0,0,0,.4);
+    }
+    .port-img              { width:100%; aspect-ratio:4/3; overflow:hidden; }
+    .port-img img          { width:100%; height:100%; object-fit:cover; transition:.45s; display:block; }
+    .port-item:hover .port-img img { transform:scale(1.07); }
+    .port-info             { padding:18px 20px; }
+    .port-tag              { font-size:.7rem; font-weight:700; color:var(--blue-lt); text-transform:uppercase; letter-spacing:.1em; margin-bottom:6px; }
+    .port-info h3          { font-size:.95rem; font-weight:600; margin-bottom:5px; }
+    .port-info p           { color:var(--muted); font-size:.83rem; line-height:1.6; }
+
+    /* count badge */
+    .port-img-wrap { position:relative; }
+    .img-count {
+      position:absolute; bottom:8px; right:8px;
+      background:rgba(0,0,0,.65); color:white; font-size:.7rem;
+      padding:3px 9px; border-radius:6px; pointer-events:none;
+    }
+
+    /* empty state */
+    .empty-state {
+      grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--muted);
+    }
+    .empty-state .icon { font-size:3rem; margin-bottom:14px; }
+
+    /* loading */
+    .loading {
+      grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--muted);
+      font-size:.9rem;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display:none; position:fixed; inset:0; z-index:9999;
+      background:rgba(0,0,0,.93); backdrop-filter:blur(10px);
+      align-items:center; justify-content:center;
+    }
+    .lightbox.open { display:flex; }
+    .lb-content { display:flex; flex-direction:column; align-items:center; gap:14px; }
+    .lb-content img {
+      max-width:90vw; max-height:82vh;
+      border-radius:14px; object-fit:contain;
+      box-shadow:0 30px 80px rgba(0,0,0,.6);
+    }
+    .lb-close {
+      position:absolute; top:18px; right:24px;
+      font-size:2.2rem; color:white; cursor:pointer;
+      background:none; border:none; font-family:inherit; opacity:.7; transition:.2s;
+    }
+    .lb-close:hover { opacity:1; }
+    .lb-nav { display:flex; align-items:center; gap:18px; }
+    .lb-nav button {
+      background:rgba(255,255,255,.14); border:none; color:white;
+      font-size:1.8rem; width:44px; height:44px; border-radius:10px;
+      cursor:pointer; transition:.2s; font-family:inherit; line-height:1;
+    }
+    .lb-nav button:hover { background:rgba(255,255,255,.28); }
+    .lb-counter { color:rgba(255,255,255,.6); font-size:.88rem; min-width:50px; text-align:center; }
+
+    /* ── FOOTER ── */
+    footer {
+      padding:28px; text-align:center;
+      color:var(--muted); border-top:1px solid var(--border); font-size:.85rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:768px) {
+      nav { padding:12px 4%; gap:8px; }
+      .page-header  { padding:100px 6% 28px; }
+      .port-section { padding:0 6% 80px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a class="nav-logo" href="index.html">karima.</a>
+  <div class="nav-cats">
+    <a class="nav-cat" href="index.html">Home</a>
+    <a class="nav-cat" href="index.html#portfolio">Portfolio</a>
+    <a class="nav-cat" href="index.html#contact">Kontak</a>
+  </div>
+  <div class="nav-right">
+    <div class="lang-toggle">
+      <button class="lang-btn" data-lang="id" onclick="setLang('id')">ID</button>
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="section-label" id="page-label">KARYA SAYA</div>
+  <h1 class="page-title" id="page-title">Portfolio <span class="accent">Pilihan</span></h1>
+  <p class="cat-desc" id="cat-desc"></p>
+</div>
+
+<!-- CATEGORY FILTER -->
+<div class="filter-bar" id="filter-bar">
+  <!-- rendered by JS -->
+</div>
+
+<!-- GRID -->
+<div class="port-section">
+  <div class="port-grid" id="port-grid">
+    <div class="loading">Memuat karya…</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <span data-en="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Illustrator"
+        data-id="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator">
+    © 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator
+  </span>
+</footer>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <div class="lb-content" onclick="event.stopPropagation()">
+    <img id="lb-img" src="" alt="">
+    <div class="lb-nav" id="lb-nav" style="display:none">
+      <button onclick="lbPrev()">‹</button>
+      <span class="lb-counter" id="lb-counter"></span>
+      <button onclick="lbNext()">›</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+const CATS = [
+  { key:'all',          id:'Semua',               en:'All Work' },
+  { key:'social',       id:'Social Media Design',  en:'Social Media Design' },
+  { key:'poster',       id:'Desain Poster',        en:'Poster Design' },
+  { key:'banner',       id:'Desain Banner',        en:'Banner Design' },
+  { key:'branding',     id:'Branding & Logo',      en:'Branding & Logo' },
+  { key:'book',         id:'Sampul Buku',           en:'Book Cover' },
+  { key:'illustration', id:'Ilustrasi',             en:'Illustration' },
+  { key:'comic',        id:'Komik Strip',           en:'Comic Strip' },
+  { key:'video',        id:'Video Editing',         en:'Video Editing' },
+  { key:'photo',        id:'Fotografi',             en:'Photography' }
+];
+
+const CAT_DESC = {
+  social:       { id:'Konten media sosial, carousel Instagram, feed design, dan iklan digital.', en:'Social media content, Instagram carousels, feed design, and digital ads.' },
+  poster:       { id:'Desain poster kampanye, kesadaran sosial, dan promosi institusional.', en:'Campaign posters, social awareness, and institutional promotion designs.' },
+  banner:       { id:'Banner promosi, desain presentasi, dan materi cetak berukuran besar.', en:'Promotional banners, presentation design, and large-format print materials.' },
+  branding:     { id:'Desain logo, identitas visual, dan panduan brand.', en:'Logo design, visual identity, and brand guidelines.' },
+  book:         { id:'Desain sampul buku, novel, dan publikasi cetak.', en:'Book cover, novel, and print publication design.' },
+  illustration: { id:'Ilustrasi digital untuk berbagai kebutuhan kreatif.', en:'Digital illustrations for various creative needs.' },
+  comic:        { id:'Komik strip digital bertema kehidupan mahasiswa dan humor sehari-hari.', en:'Digital comic strips about student life and everyday humor.' },
+  video:        { id:'Editing video promosi, konten TikTok, dan video institusional.', en:'Promotional video editing, TikTok content, and institutional videos.' },
+  photo:        { id:'Dokumentasi foto event, potret, dan fotografi kampus.', en:'Event documentation, portraits, and campus photography.' }
+};
+
+// ── STATE ───────────────────────────────────────────────────
+let currentLang = localStorage.getItem('lang') || 'id';
+let currentCat  = new URLSearchParams(location.search).get('cat') || 'all';
+let lbImages = [], lbIndex = 0;
+let allItems = [];
+
+// ── UTILS ────────────────────────────────────────────────────
+const toSrc = p => p ? p.replace(/ /g,'%20') : '';
+
+// ── LANGUAGE ────────────────────────────────────────────────
+function setLang(lang) {
+  currentLang = lang;
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = el.dataset[lang]; if (v) el.innerHTML = v;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+  renderFilter();
+  renderGrid(currentCat);
+  updateHeader();
+}
+
+// ── FILTER BAR ───────────────────────────────────────────────
+function renderFilter() {
+  const bar = document.getElementById('filter-bar');
+  bar.innerHTML = CATS.map(c => {
+    const active = c.key === currentCat ? ' active' : '';
+    const label  = currentLang === 'id' ? c.id : c.en;
+    return `<button class="filter-btn${active}" onclick="switchCat('${c.key}')">${label}</button>`;
+  }).join('');
+}
+function switchCat(key) {
+  currentCat = key;
+  const url = key === 'all' ? 'work.html' : 'work.html?cat=' + key;
+  history.replaceState(null, '', url);
+  renderFilter();
+  renderGrid(key);
+  updateHeader();
+}
+
+// ── HEADER ───────────────────────────────────────────────────
+function updateHeader() {
+  const catObj = CATS.find(c => c.key === currentCat) || CATS[0];
+  const label  = currentLang === 'id' ? 'KARYA SAYA' : 'MY WORK';
+  document.getElementById('page-label').textContent = label;
+
+  if (currentCat === 'all') {
+    document.getElementById('page-title').innerHTML =
+      currentLang === 'id'
+        ? 'Portfolio <span class="accent">Pilihan</span>'
+        : 'Featured <span class="accent">Portfolio</span>';
+    document.getElementById('cat-desc').textContent = '';
+  } else {
+    const title = currentLang === 'id' ? catObj.id : catObj.en;
+    document.getElementById('page-title').innerHTML =
+      title.replace(/(\S+)\s*$/, '<span class="accent">$1</span>');
+    const desc = (CAT_DESC[currentCat] || {})[currentLang] || '';
+    document.getElementById('cat-desc').textContent = desc;
+  }
+
+  document.title = (currentCat === 'all' ? 'Portfolio' : (currentLang === 'id' ? catObj.id : catObj.en)) + ' — Karima Kurnia Sasi';
+}
+
+// ── RENDER GRID ─────────────────────────────────────────────
+function renderGrid(cat) {
+  const grid    = document.getElementById('port-grid');
+  const items   = cat === 'all' ? allItems : allItems.filter(i => i.category === cat);
+
+  if (!items.length) {
+    grid.innerHTML = `<div class="empty-state">
+      <div class="icon">🎨</div>
+      <p>${currentLang === 'id' ? 'Belum ada karya di kategori ini.' : 'No work in this category yet.'}</p>
+    </div>`;
+    return;
+  }
+
+  grid.innerHTML = items.map(item => {
+    const imgs  = item.images && item.images.length ? item.images : [item.cover];
+    const data  = JSON.stringify(imgs);
+    const count = imgs.length;
+    return `<div class="port-item" onclick='openLightbox(${data})'>
+      <div class="port-img-wrap port-img">
+        <img src="${toSrc(item.cover)}" alt="${item['title_'+currentLang]}" loading="lazy">
+        ${count > 1 ? `<span class="img-count">📷 ${count}</span>` : ''}
+      </div>
+      <div class="port-info">
+        <div class="port-tag">${item['tag_'+currentLang]}</div>
+        <h3>${item['title_'+currentLang]}</h3>
+        <p>${item['desc_'+currentLang]}</p>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── LIGHTBOX ────────────────────────────────────────────────
+function openLightbox(images) {
+  lbImages = images; lbIndex = 0;
+  showLbImage();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('lb-nav').style.display = images.length > 1 ? 'flex' : 'none';
+}
+function showLbImage() {
+  document.getElementById('lb-img').src = toSrc(lbImages[lbIndex]);
+  document.getElementById('lb-counter').textContent = lbImages.length > 1 ? (lbIndex+1)+' / '+lbImages.length : '';
+}
+function lbPrev() { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; showLbImage(); }
+function lbNext() { lbIndex = (lbIndex + 1) % lbImages.length; showLbImage(); }
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape')     closeLightbox();
+  if (e.key === 'ArrowLeft')  lbPrev();
+  if (e.key === 'ArrowRight') lbNext();
+});
+
+// ── SCROLL ───────────────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60);
+});
+
+// ── INIT ─────────────────────────────────────────────────────
+async function init() {
+  // Apply language first
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const v = el.dataset[currentLang]; if (v) el.innerHTML = v;
+  });
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+
+  renderFilter();
+  updateHeader();
+
+  try {
+    const data = await fetch('portfolio.json').then(r => r.json());
+    allItems = data.items || [];
+  } catch(e) {
+    allItems = [];
+  }
+  renderGrid(currentCat);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+- Social Media Design
+- Poster Design
+- Banner Design
+- Branding & Logo Design
+- Book Cover
+- Illustration
+- Comic Strip
+- Video Editing
+- Photography

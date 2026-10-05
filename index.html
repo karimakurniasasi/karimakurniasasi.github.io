@@ -1,68 +1,73 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Karima Kurnia Sasi — Graphic Designer, Video Editor, Illustrator, Adobe Certified Professional. 5+ years experience in creative design, branding, and social media.">
+  <meta name="description" content="Karima Kurnia Sasi — Graphic Designer, Video Editor, Illustrator, Adobe Certified Professional.">
   <title>Karima Kurnia Sasi — Graphic Designer</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+
   <style>
     :root {
-      --bg:       #0b1120;
-      --surface:  #111c34;
-      --surface2: #1a2540;
-      --blue:     #3b82f6;
-      --blue-lt:  #60a5fa;
-      --blue-dim: rgba(59,130,246,.12);
-      --text:     #e2e8f0;
-      --muted:    #94a3b8;
-      --border:   rgba(255,255,255,.07);
-      --gold:     #f59e0b;
-      --gold-dim: rgba(245,158,11,.12);
+      --bg:#0b1120; --surface:#111c34; --surface2:#1a2540; --surface3:#1f2d4a;
+      --blue:#3b82f6; --blue-lt:#60a5fa; --blue-dim:rgba(59,130,246,.12);
+      --text:#e2e8f0; --muted:#94a3b8; --border:rgba(255,255,255,.07);
+      --gold:#f59e0b; --gold-dim:rgba(245,158,11,.12);
     }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
+    a    { text-decoration:none; color:inherit; }
 
-    *       { margin:0; padding:0; box-sizing:border-box; }
-    html    { scroll-behavior:smooth; }
-    body    { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
-    a       { text-decoration:none; color:inherit; }
-    section { padding:100px 10%; }
-
-    /* ── NAVBAR ── */
+    /* ══ NAV ══ */
     nav {
-      width:100%; position:fixed; top:0; left:0;
-      padding:18px 10%;
-      display:flex; justify-content:space-between; align-items:center;
+      width:100%; position:fixed; top:0; left:0; z-index:1000;
+      display:grid; grid-template-columns:auto 1fr auto;
+      align-items:center; gap:16px; padding:14px 5%;
       backdrop-filter:blur(16px);
-      background:rgba(11,17,32,.7);
+      background:rgba(11,17,32,.75);
       border-bottom:1px solid var(--border);
-      z-index:1000; transition:.3s;
+      transition:.3s;
     }
-    nav.scrolled { background:rgba(11,17,32,.96); }
-    .nav-logo    { font-size:1.4rem; font-weight:800; color:var(--blue-lt); letter-spacing:-.03em; }
-    nav ul       { display:flex; gap:28px; list-style:none; }
-    nav ul li a  { color:var(--muted); transition:.3s; font-size:.88rem; font-weight:500; }
-    nav ul li a:hover { color:var(--blue-lt); }
-
-    .nav-right { display:flex; align-items:center; gap:16px; }
-    .lang-toggle {
-      display:flex; background:var(--surface);
-      border-radius:10px; overflow:hidden;
-      border:1px solid var(--border);
+    nav.scrolled { background:rgba(11,17,32,.97); }
+    .nav-logo { font-size:1.35rem; font-weight:800; color:var(--blue-lt); letter-spacing:-.03em; white-space:nowrap; }
+    .nav-links {
+      display:flex; gap:4px; justify-content:center;
+      overflow-x:auto; scrollbar-width:none; padding:2px 0; min-width:0;
     }
+    .nav-links::-webkit-scrollbar { display:none; }
+    .nav-link {
+      white-space:nowrap; padding:6px 15px; border-radius:100px;
+      font-size:.78rem; font-weight:600; cursor:pointer; transition:.2s;
+      background:transparent; border:1px solid transparent;
+      color:var(--muted); text-decoration:none;
+    }
+    .nav-link:hover { color:var(--blue-lt); border-color:rgba(96,165,250,.3); }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    .kpi-btn {
+      padding:6px 14px; border-radius:100px; font-size:.76rem; font-weight:700;
+      border:1px solid rgba(245,158,11,.4); color:var(--gold); background:var(--gold-dim);
+      cursor:pointer; font-family:inherit; transition:.2s; text-decoration:none;
+      white-space:nowrap;
+    }
+    .kpi-btn:hover { background:var(--gold); color:#0b1120; }
+    .lang-toggle { display:flex; background:var(--surface); border-radius:9px; overflow:hidden; border:1px solid var(--border); }
     .lang-btn {
-      padding:6px 14px; font-size:.78rem; font-weight:700;
+      padding:5px 12px; font-size:.75rem; font-weight:700;
       font-family:inherit; background:transparent; border:none;
-      color:var(--muted); cursor:pointer; transition:.2s; letter-spacing:.05em;
+      color:var(--muted); cursor:pointer; transition:.2s;
     }
     .lang-btn.active { background:var(--blue); color:white; }
 
-    /* ── HERO ── */
+    /* ══ HERO ══ */
     .hero {
-      min-height:100vh;
+      min-height:100vh; padding:0 10%;
       display:flex; align-items:center; justify-content:space-between; gap:60px;
       position:relative;
     }
@@ -74,292 +79,256 @@
     }
     .hero-text { flex:1; position:relative; z-index:1; }
     .hero-badge {
-      display:inline-flex; align-items:center; gap:8px;
+      display:inline-flex; align-items:center; gap:8px; flex-wrap:wrap;
       background:var(--blue-dim); border:1px solid rgba(59,130,246,.3);
-      border-radius:100px; padding:7px 18px; margin-bottom:24px;
-      font-size:.8rem; color:var(--blue-lt); font-weight:500; flex-wrap:wrap;
+      border-radius:100px; padding:7px 18px; margin-bottom:14px;
+      font-size:.8rem; color:var(--blue-lt); font-weight:500;
     }
     .cert-badge {
       display:inline-flex; align-items:center; gap:6px;
       background:var(--gold-dim); border:1px solid rgba(245,158,11,.3);
       border-radius:100px; padding:5px 14px; margin-bottom:18px;
-      font-size:.75rem; color:var(--gold); font-weight:600; margin-left:8px;
+      font-size:.74rem; color:var(--gold); font-weight:600; margin-left:8px;
     }
     .hero-text h1 {
       font-size:clamp(2.6rem,5vw,4.2rem);
-      font-weight:800; line-height:1.1;
-      letter-spacing:-.03em; margin-bottom:20px;
+      font-weight:800; line-height:1.1; letter-spacing:-.03em; margin-bottom:18px;
     }
     .hero-text h1 .accent { color:var(--blue-lt); }
     .hero-text p {
       color:var(--muted); max-width:520px;
-      line-height:1.85; font-size:.97rem; margin-bottom:36px;
+      line-height:1.85; font-size:.97rem; margin-bottom:34px;
     }
-    .btn-group { display:flex; gap:14px; flex-wrap:wrap; }
+    .btn-group { display:flex; gap:12px; flex-wrap:wrap; }
     .btn {
-      padding:14px 28px; border-radius:14px; transition:.3s;
-      font-weight:600; font-family:inherit; cursor:pointer; font-size:.92rem;
-      display:inline-block;
+      padding:13px 26px; border-radius:13px; transition:.3s;
+      font-weight:600; font-family:inherit; cursor:pointer; font-size:.9rem;
+      display:inline-block; border:none;
     }
-    .btn-primary { background:var(--blue); color:white; border:none; }
-    .btn-primary:hover {
-      background:#2563eb; transform:translateY(-3px);
-      box-shadow:0 8px 25px rgba(59,130,246,.35);
-    }
-    .btn-outline { border:1px solid rgba(255,255,255,.18); color:var(--text); background:transparent; }
+    .btn-primary { background:var(--blue); color:white; }
+    .btn-primary:hover { background:#2563eb; transform:translateY(-3px); box-shadow:0 8px 24px rgba(59,130,246,.35); }
+    .btn-outline { border:1px solid rgba(255,255,255,.18) !important; color:var(--text); background:transparent; }
     .btn-outline:hover { background:white; color:var(--bg); transform:translateY(-3px); }
 
-    /* Hero visual — profile photo */
-    .hero-visual {
-      flex:1; display:flex; flex-direction:column;
-      align-items:center; gap:20px;
-      position:relative; z-index:1;
-    }
-    .hero-photo-wrap {
-      position:relative;
-    }
+    .hero-visual { flex:1; display:flex; flex-direction:column; align-items:center; gap:20px; position:relative; z-index:1; }
+    .hero-photo-wrap { position:relative; }
     .hero-photo-wrap::before {
-      content:''; position:absolute;
-      width:280px; height:280px;
+      content:''; position:absolute; width:280px; height:280px;
       background:radial-gradient(circle,#3b82f655 0%,transparent 70%);
       top:-30px; left:-30px; z-index:0; pointer-events:none;
     }
     .hero-photo {
-      width:320px; height:400px;
-      border-radius:28px; overflow:hidden;
+      width:300px; height:380px; border-radius:26px; overflow:hidden;
       border:2px solid rgba(59,130,246,.3);
-      box-shadow:0 30px 60px rgba(0,0,0,.5);
-      position:relative; z-index:1;
+      box-shadow:0 30px 60px rgba(0,0,0,.5); position:relative; z-index:1;
     }
-    .hero-photo img {
-      width:100%; height:100%; object-fit:cover; object-position:center top;
-      display:block;
-    }
+    .hero-photo img { width:100%; height:100%; object-fit:cover; object-position:center top; display:block; }
     .hero-photo::after {
       content:''; position:absolute; inset:0;
-      background:linear-gradient(to bottom, transparent 60%, rgba(11,17,32,.6) 100%);
+      background:linear-gradient(to bottom,transparent 60%,rgba(11,17,32,.6) 100%);
       pointer-events:none;
     }
-
     .hero-stats {
-      display:flex; gap:24px;
-      background:var(--surface); border:1px solid var(--border);
-      border-radius:18px; padding:16px 28px;
-      box-shadow:0 10px 30px rgba(0,0,0,.3);
+      display:flex; gap:24px; background:var(--surface);
+      border:1px solid var(--border); border-radius:16px; padding:14px 26px;
+      box-shadow:0 10px 28px rgba(0,0,0,.3);
     }
-    .stat          { text-align:center; }
-    .stat-num      { font-size:1.6rem; font-weight:800; color:var(--blue-lt); line-height:1; }
-    .stat-label    { font-size:.72rem; color:var(--muted); margin-top:4px; white-space:nowrap; }
+    .stat { text-align:center; }
+    .stat-num   { font-size:1.55rem; font-weight:800; color:var(--blue-lt); line-height:1; }
+    .stat-label { font-size:.7rem; color:var(--muted); margin-top:4px; white-space:nowrap; }
 
-    /* ── SECTION META ── */
-    .section-label {
-      font-size:.78rem; font-weight:700; color:var(--blue-lt);
-      letter-spacing:.15em; text-transform:uppercase; margin-bottom:10px;
+    /* ══ SECTION SHARED ══ */
+    .section { padding:90px 10%; }
+    .section-tag {
+      display:inline-block; background:var(--blue-dim);
+      border:1px solid rgba(59,130,246,.3); border-radius:100px;
+      padding:5px 16px; font-size:.74rem; color:var(--blue-lt);
+      font-weight:700; margin-bottom:14px; letter-spacing:.06em; text-transform:uppercase;
     }
     .section-title {
-      font-size:clamp(1.8rem,3vw,2.5rem); font-weight:800;
-      letter-spacing:-.02em; margin-bottom:50px; line-height:1.2;
+      font-size:clamp(1.9rem,3.5vw,2.8rem); font-weight:800;
+      letter-spacing:-.03em; margin-bottom:12px;
     }
-    .section-title .accent { color:var(--blue-lt); }
+    .section-sub { color:var(--muted); font-size:.93rem; line-height:1.75; max-width:500px; }
 
-    /* ── ABOUT ── */
-    .about-layout {
-      display:grid; grid-template-columns:1fr 1.2fr; gap:60px; align-items:start;
+    /* ══ PORTFOLIO ══ */
+    .portfolio-head { margin-bottom:40px; }
+    .filter-pills { display:flex; gap:6px; flex-wrap:wrap; margin-top:24px; }
+    .fpill {
+      padding:6px 16px; border-radius:100px; font-size:.76rem;
+      font-weight:600; font-family:inherit; cursor:pointer; transition:.2s;
+      border:1px solid var(--border); background:transparent; color:var(--muted);
     }
-    .about-text p {
-      color:var(--muted); line-height:1.9; font-size:.97rem; margin-bottom:18px;
-    }
-    .skills-wrap { display:flex; flex-wrap:wrap; gap:9px; margin-top:26px; }
-    .skill-pill {
-      padding:7px 16px; border-radius:100px;
-      background:var(--blue-dim); border:1px solid rgba(59,130,246,.3);
-      color:var(--blue-lt); font-size:.8rem; font-weight:500;
-    }
-
-    .about-cards { display:flex; flex-direction:column; gap:16px; }
-    .about-card {
-      background:var(--surface); border-radius:20px; padding:24px 26px;
-      border:1px solid var(--border); transition:.3s;
-      display:flex; gap:18px; align-items:flex-start;
-    }
-    .about-card:hover { border-color:var(--blue); transform:translateX(6px); }
-    .about-card-icon {
-      width:44px; height:44px; border-radius:12px;
-      background:var(--blue-dim); display:flex; align-items:center;
-      justify-content:center; font-size:1.3rem; flex-shrink:0;
-    }
-    .about-card h3  { font-size:1rem; font-weight:600; margin-bottom:5px; }
-    .about-card p   { color:var(--muted); font-size:.87rem; line-height:1.65; }
-
-    /* ── PORTFOLIO ── */
-    .filter-bar { display:flex; gap:9px; flex-wrap:wrap; margin-bottom:38px; }
-    .filter-btn {
-      padding:9px 20px; border-radius:100px;
-      background:var(--surface); border:1px solid var(--border);
-      color:var(--muted); font-size:.83rem; font-weight:500;
-      cursor:pointer; transition:.2s; font-family:inherit;
-    }
-    .filter-btn:hover  { border-color:var(--blue); color:var(--blue-lt); }
-    .filter-btn.active { background:var(--blue); color:white; border-color:var(--blue); }
+    .fpill:hover  { border-color:var(--blue-lt); color:var(--blue-lt); }
+    .fpill.active { background:var(--blue); color:white; border-color:var(--blue); }
 
     .portfolio-grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
-      gap:20px;
+      display:grid; grid-template-columns:repeat(3,1fr); gap:24px;
     }
-    .port-item {
-      border-radius:20px; overflow:hidden;
+
+    .p-card {
       background:var(--surface); border:1px solid var(--border);
-      transition:.4s; cursor:pointer;
+      border-radius:20px; overflow:hidden; transition:.3s;
+      display:flex; flex-direction:column; cursor:pointer;
     }
-    .port-item:hover {
-      transform:translateY(-8px); border-color:var(--blue);
-      box-shadow:0 20px 40px rgba(0,0,0,.4);
-    }
-    .port-item.hidden { display:none; }
+    .p-card:hover { transform:translateY(-6px); border-color:rgba(59,130,246,.4); box-shadow:0 24px 48px rgba(0,0,0,.45); }
 
-    .port-img                { width:100%; aspect-ratio:4/3; overflow:hidden; }
-    .port-img img            { width:100%; height:100%; object-fit:cover; transition:.45s; display:block; }
-    .port-item:hover .port-img img { transform:scale(1.07); }
+    .p-thumb {
+      width:100%; aspect-ratio:4/3; overflow:hidden;
+      background:var(--surface2); position:relative; flex-shrink:0;
+    }
+    .p-thumb img { width:100%; height:100%; object-fit:cover; display:block; transition:.4s; }
+    .p-card:hover .p-thumb img { transform:scale(1.06); }
+    .p-thumb-empty {
+      width:100%; height:100%; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:8px;
+    }
+    .p-thumb-empty span:first-child { font-size:2.4rem; opacity:.25; }
+    .p-thumb-empty span:last-child  { font-size:.72rem; color:var(--muted); opacity:.5; font-weight:600; text-transform:uppercase; letter-spacing:.1em; }
 
-    .port-info   { padding:20px 22px; }
-    .port-tag    {
-      font-size:.7rem; font-weight:700; color:var(--blue-lt);
-      text-transform:uppercase; letter-spacing:.1em; margin-bottom:7px;
+    /* PDF page count badge */
+    .p-pdf-badge {
+      position:absolute; bottom:10px; right:10px;
+      background:rgba(11,17,32,.8); border:1px solid var(--border);
+      border-radius:8px; padding:3px 10px;
+      font-size:.68rem; font-weight:700; color:var(--blue-lt);
+      display:flex; align-items:center; gap:5px;
+      backdrop-filter:blur(4px);
     }
-    .port-info h3 { font-size:.97rem; font-weight:600; margin-bottom:6px; }
-    .port-info p  { color:var(--muted); font-size:.84rem; line-height:1.6; }
 
-    /* ── EXPERIENCE ── */
-    .timeline {
-      max-width:750px;
-      border-left:2px solid var(--border);
-      padding-left:36px;
-      display:flex; flex-direction:column; gap:44px;
+    .p-body { padding:20px; flex:1; display:flex; flex-direction:column; gap:8px; }
+    .p-cat  {
+      display:inline-block; font-size:.68rem; font-weight:700;
+      text-transform:uppercase; letter-spacing:.08em;
+      padding:3px 10px; border-radius:100px;
+      background:var(--blue-dim); color:var(--blue-lt);
     }
-    .tl-item          { position:relative; }
-    .tl-item::before  {
-      content:''; position:absolute;
-      width:14px; height:14px; background:var(--blue);
-      border:3px solid var(--bg); border-radius:50%;
-      left:-44px; top:6px;
+    .p-title { font-size:.97rem; font-weight:700; line-height:1.3; }
+    .p-desc  { font-size:.81rem; color:var(--muted); line-height:1.7; flex:1; }
+    .p-cta {
+      margin-top:14px; padding:10px; border-radius:11px;
+      background:var(--blue); color:white; font-weight:600;
+      font-size:.8rem; text-align:center; transition:.2s;
+      display:flex; align-items:center; justify-content:center; gap:6px;
     }
-    .tl-date  { font-size:.82rem; font-weight:600; color:var(--blue-lt); margin-bottom:6px; }
-    .tl-item h3 { font-size:1.05rem; font-weight:700; margin-bottom:4px; }
-    .tl-place { font-size:.87rem; color:var(--muted); margin-bottom:10px; font-style:italic; }
-    .tl-item ul { color:var(--muted); font-size:.9rem; line-height:1.85; padding-left:18px; }
-    .tl-item ul li { margin-bottom:4px; }
+    .p-card:hover .p-cta { background:#2563eb; }
+    .p-cta-placeholder {
+      margin-top:14px; padding:10px; border-radius:11px;
+      background:var(--surface2); color:var(--muted); font-size:.8rem;
+      text-align:center; font-weight:600;
+      display:flex; align-items:center; justify-content:center; gap:6px;
+    }
 
-    /* ── AWARDS & CERTS ── */
-    .recognition-grid {
-      display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px;
+    /* ══ PDF VIEWER MODAL ══ */
+    .pdf-overlay {
+      display:none; position:fixed; inset:0; z-index:2000;
+      background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
     }
-    .rec-card {
-      background:var(--surface); border-radius:20px; padding:26px 28px;
-      border:1px solid var(--border); transition:.3s;
-      display:flex; gap:18px; align-items:flex-start;
-    }
-    .rec-card:hover { border-color:var(--gold); transform:translateY(-5px); }
-    .rec-card.cert:hover { border-color:var(--blue); }
-    .rec-icon {
-      width:48px; height:48px; border-radius:14px;
-      background:var(--gold-dim); border:1px solid rgba(245,158,11,.25);
-      display:flex; align-items:center; justify-content:center;
-      font-size:1.5rem; flex-shrink:0;
-    }
-    .rec-icon.cert-icon {
-      background:var(--blue-dim); border-color:rgba(59,130,246,.25);
-    }
-    .rec-card h3    { font-size:.95rem; font-weight:700; margin-bottom:5px; line-height:1.4; }
-    .rec-card .rec-meta { font-size:.8rem; color:var(--muted); }
-    .rec-card .rec-issuer { color:var(--blue-lt); font-weight:600; }
+    .pdf-overlay.open { display:flex; flex-direction:column; }
 
-    /* ── CONTACT ── */
+    .pdf-topbar {
+      display:flex; align-items:center; gap:12px; flex-shrink:0;
+      padding:12px 20px; background:var(--surface);
+      border-bottom:1px solid var(--border);
+    }
+    .pdf-title  { font-weight:700; font-size:.9rem; flex:1; min-width:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pdf-page-info { font-size:.78rem; color:var(--muted); white-space:nowrap; min-width:80px; text-align:center; }
+    .pdf-controls { display:flex; align-items:center; gap:6px; }
+    .pdf-btn {
+      background:var(--surface2); border:1px solid var(--border);
+      color:var(--text); border-radius:8px; padding:6px 12px;
+      font-family:inherit; font-size:.78rem; font-weight:600;
+      cursor:pointer; transition:.2s; white-space:nowrap;
+    }
+    .pdf-btn:hover    { border-color:var(--blue-lt); color:var(--blue-lt); }
+    .pdf-btn.danger   { color:var(--muted); }
+    .pdf-btn.danger:hover { border-color:rgba(239,68,68,.4); color:#ef4444; }
+    .pdf-zoom-val     { font-size:.78rem; color:var(--muted); min-width:40px; text-align:center; }
+
+    .pdf-body {
+      flex:1; overflow-y:auto; overflow-x:hidden;
+      display:flex; flex-direction:column; align-items:center;
+      padding:24px 16px; gap:12px;
+      scroll-behavior:smooth;
+    }
+    .pdf-body::-webkit-scrollbar       { width:6px; }
+    .pdf-body::-webkit-scrollbar-track { background:transparent; }
+    .pdf-body::-webkit-scrollbar-thumb { background:rgba(255,255,255,.15); border-radius:3px; }
+
+    .pdf-page-canvas {
+      max-width:100%; border-radius:4px;
+      box-shadow:0 4px 24px rgba(0,0,0,.6);
+      display:block;
+    }
+    .pdf-loading {
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:14px; color:var(--muted);
+    }
+    .pdf-loading .spinner {
+      width:36px; height:36px; border:3px solid var(--border);
+      border-top-color:var(--blue-lt); border-radius:50%;
+      animation:spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    .pdf-err {
+      flex:1; display:flex; flex-direction:column;
+      align-items:center; justify-content:center; gap:12px; color:var(--muted); text-align:center; padding:20px;
+    }
+
+    /* ══ CONTACT ══ */
     .contact-box {
       background:linear-gradient(145deg,var(--surface2),var(--surface));
-      border-radius:30px; padding:70px 60px;
+      border-radius:28px; padding:64px 56px;
       text-align:center; border:1px solid var(--border);
       position:relative; overflow:hidden;
     }
     .contact-box::before {
-      content:''; position:absolute;
-      width:500px; height:500px;
+      content:''; position:absolute; width:500px; height:500px;
       background:radial-gradient(circle,#2563eb33 0%,transparent 70%);
       bottom:-200px; right:-100px; z-index:0; pointer-events:none;
     }
     .contact-box > * { position:relative; z-index:1; }
-    .contact-box h2  {
-      font-size:clamp(1.8rem,3vw,2.6rem);
-      font-weight:800; margin-bottom:16px;
-    }
-    .contact-box p {
-      color:var(--muted); margin-bottom:36px; line-height:1.85;
-      max-width:500px; margin-left:auto; margin-right:auto;
-    }
+    .contact-box h2  { font-size:clamp(1.8rem,3vw,2.5rem); font-weight:800; margin-bottom:14px; }
+    .contact-box p   { color:var(--muted); margin-bottom:34px; line-height:1.85; max-width:480px; margin-left:auto; margin-right:auto; }
 
     footer {
-      padding:30px; text-align:center;
-      color:var(--muted); border-top:1px solid var(--border);
-      font-size:.87rem;
+      padding:28px; text-align:center;
+      color:var(--muted); border-top:1px solid var(--border); font-size:.85rem;
     }
 
-    /* ── LIGHTBOX ── */
-    .lightbox {
-      display:none; position:fixed; inset:0; z-index:9999;
-      background:rgba(0,0,0,.92); backdrop-filter:blur(10px);
-      align-items:center; justify-content:center;
-    }
-    .lightbox.open { display:flex; }
-    .lightbox img  {
-      max-width:90vw; max-height:90vh;
-      border-radius:16px; object-fit:contain;
-      box-shadow:0 30px 80px rgba(0,0,0,.6);
-    }
-    .lb-close {
-      position:absolute; top:20px; right:28px;
-      font-size:2.2rem; color:white; cursor:pointer;
-      background:none; border:none; font-family:inherit;
-      line-height:1; opacity:.7; transition:.2s;
-    }
-    .lb-close:hover { opacity:1; }
-
-    /* ── REVEAL ── */
+    /* ══ REVEAL ══ */
     .reveal { opacity:0; transform:translateY(28px); transition:.65s ease; }
     .reveal.visible { opacity:1; transform:translateY(0); }
 
-    /* ── RESPONSIVE ── */
-    @media(max-width:1000px) {
-      .about-layout { grid-template-columns:1fr; }
-    }
-    @media(max-width:768px) {
-      nav ul { display:none; }
-      .hero {
-        flex-direction:column-reverse;
-        text-align:center; padding-top:120px; gap:40px;
-      }
-      .hero-text p   { margin:0 auto 36px; }
-      .btn-group     { justify-content:center; }
-      .hero-photo    { width:260px; height:320px; }
+    /* ══ RESPONSIVE ══ */
+    @media(max-width:1024px) { .portfolio-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:768px)  {
+      nav { grid-template-columns:auto auto 1fr auto; padding:12px 4%; gap:8px; }
+      .nav-links { display:none; }
+      .hero { flex-direction:column-reverse; text-align:center; padding:110px 6% 60px; gap:36px; }
+      .hero-text p  { margin:0 auto 34px; }
+      .btn-group    { justify-content:center; }
+      .hero-photo   { width:240px; height:300px; }
       .hero-photo-wrap::before { display:none; }
-      .contact-box   { padding:40px 24px; }
-      section        { padding:80px 6%; }
+      .section { padding:60px 6%; }
+      .portfolio-grid { grid-template-columns:1fr; }
+      .contact-box { padding:40px 22px; }
+      .pdf-topbar { flex-wrap:wrap; gap:8px; }
+      .pdf-title  { font-size:.82rem; }
     }
   </style>
 </head>
-
 <body>
 
-<!-- NAVBAR -->
+<!-- ══ NAV ══ -->
 <nav id="navbar">
-  <span class="nav-logo">karima.</span>
-  <ul>
-    <li><a href="#about"      data-en="About"       data-id="Tentang">Tentang</a></li>
-    <li><a href="#portfolio"  data-en="Portfolio"    data-id="Portofolio">Portofolio</a></li>
-    <li><a href="#experience" data-en="Experience"   data-id="Pengalaman">Pengalaman</a></li>
-    <li><a href="#recognition" data-en="Awards"      data-id="Penghargaan">Penghargaan</a></li>
-    <li><a href="#contact"    data-en="Contact"      data-id="Kontak">Kontak</a></li>
-  </ul>
+  <a class="nav-logo" href="#">karima.</a>
+  <div class="nav-links">
+    <a class="nav-link" href="#portfolio" data-en="Portfolio" data-id="Portfolio">Portfolio</a>
+    <a class="nav-link" href="#contact"   data-en="Contact"   data-id="Kontak">Kontak</a>
+  </div>
   <div class="nav-right">
+    <a href="kpi.html" class="kpi-btn">📊 KPI</a>
     <div class="lang-toggle">
       <button class="lang-btn" data-lang="id" onclick="setLang('id')">ID</button>
       <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
@@ -367,31 +336,28 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- ══ HERO ══ -->
 <section class="hero" id="home">
-
   <div class="hero-text reveal">
     <div>
       <div class="hero-badge">
         <span>✦</span>
-        <span data-en="Graphic Designer · Video Editor · Illustrator" data-id="Graphic Designer · Video Editor · Ilustrator">Graphic Designer · Video Editor · Ilustrator</span>
+        <span data-en="Graphic Designer · Video Editor · Illustrator"
+              data-id="Graphic Designer · Video Editor · Ilustrator">Graphic Designer · Video Editor · Ilustrator</span>
       </div>
       <span class="cert-badge">🏅 Adobe Certified Professional</span>
     </div>
-
     <h1>
       <span data-en="Designing Visuals" data-id="Merancang Visual">Merancang Visual</span><br>
       <span class="accent" data-en="That Feel Alive." data-id="Yang Terasa Hidup.">Yang Terasa Hidup.</span>
     </h1>
-
-    <p data-en="Hi, I'm Karima Kurnia Sasi — a creative professional with 5 years of experience in graphic design, illustration, and video editing for branding and marketing. I turn company briefs into effective visual works: posters, social media content, illustrations, and videos."
-       data-id="Hai, aku Karima Kurnia Sasi — profesional kreatif dengan 5 tahun pengalaman di bidang graphic design, ilustrasi, dan video editing untuk branding dan marketing. Aku mengubah brief klien menjadi karya visual yang efektif: poster, konten media sosial, ilustrasi, dan video.">
-      Hai, aku Karima Kurnia Sasi — profesional kreatif dengan 5 tahun pengalaman di bidang graphic design, ilustrasi, dan video editing untuk branding dan marketing. Aku mengubah brief klien menjadi karya visual yang efektif: poster, konten media sosial, ilustrasi, dan video.
+    <p data-en="Hi, I'm Karima Kurnia Sasi — a creative professional with 5 years of experience in graphic design, illustration, and video editing for branding and marketing. I turn briefs into effective visual works."
+       data-id="Hai, aku Karima Kurnia Sasi — profesional kreatif dengan 5 tahun pengalaman di bidang graphic design, ilustrasi, dan video editing untuk branding dan marketing. Aku mengubah brief menjadi karya visual yang efektif.">
+      Hai, aku Karima Kurnia Sasi — profesional kreatif dengan 5 tahun pengalaman di bidang graphic design, ilustrasi, dan video editing untuk branding dan marketing. Aku mengubah brief menjadi karya visual yang efektif.
     </p>
-
     <div class="btn-group">
-      <a href="#portfolio" class="btn btn-primary" data-en="See My Work" data-id="Lihat Karya">Lihat Karya</a>
-      <a href="https://www.linkedin.com/in/karimakurniasasi/" target="_blank" class="btn btn-outline" data-en="LinkedIn" data-id="LinkedIn">LinkedIn</a>
+      <a href="#portfolio" class="btn btn-primary" data-en="See Portfolio" data-id="Lihat Portfolio">Lihat Portfolio</a>
+      <a href="https://www.linkedin.com/in/karimakurniasasi/" target="_blank" class="btn btn-outline">LinkedIn</a>
     </div>
   </div>
 
@@ -401,7 +367,6 @@
         <img src="assets/profile.jpg" alt="Karima Kurnia Sasi" loading="eager">
       </div>
     </div>
-
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num">5+</div>
@@ -417,417 +382,335 @@
       </div>
     </div>
   </div>
-
 </section>
 
-<!-- ABOUT -->
-<section id="about">
-  <div class="reveal">
-    <div class="section-label" data-en="WHO I AM" data-id="SIAPA AKU">SIAPA AKU</div>
-    <h2 class="section-title" data-en="About <span class='accent'>Me</span>" data-id="Tentang <span class='accent'>Saya</span>">Tentang <span class="accent">Saya</span></h2>
+<!-- ══ PORTFOLIO ══ -->
+<section class="section" id="portfolio">
+  <div class="portfolio-head reveal">
+    <div class="section-tag" data-en="Selected Work" data-id="Karya Pilihan">Karya Pilihan</div>
+    <h2 class="section-title" data-en="My Portfolio" data-id="Portofolio Saya">Portofolio Saya</h2>
+    <p class="section-sub"
+       data-en="Click a project to open the full PDF portfolio — scroll through all pages directly in the viewer."
+       data-id="Klik proyek untuk membuka PDF portofolio lengkap — scroll semua halaman langsung di viewer.">
+      Klik proyek untuk membuka PDF portofolio lengkap — scroll semua halaman langsung di viewer.
+    </p>
+    <div class="filter-pills" id="filter-pills">
+      <!-- rendered by JS -->
+    </div>
   </div>
-
-  <div class="about-layout">
-
-    <div class="about-text reveal">
-      <p data-en="I am a professional with 5 years of experience in the creative field, including graphic design, illustration, and video editing for branding and marketing — both on social media and in print media."
-         data-id="Aku adalah profesional dengan 5 tahun pengalaman di bidang kreatif, mencakup desain grafis, ilustrasi, dan video editing untuk branding dan marketing — baik di media sosial maupun media cetak.">
-        Aku adalah profesional dengan 5 tahun pengalaman di bidang kreatif, mencakup desain grafis, ilustrasi, dan video editing untuk branding dan marketing — baik di media sosial maupun media cetak.
-      </p>
-      <p data-en="I have strong skills in visualizing company briefs into effective visual works such as posters, illustrations, and videos. Always committed to delivering innovative creative solutions and passionate about continuous growth."
-         data-id="Aku memiliki kemampuan kuat dalam menvisualisasikan brief klien menjadi karya visual yang efektif seperti poster, ilustrasi, dan video. Selalu berkomitmen menghadirkan solusi kreatif yang inovatif dan semangat untuk terus berkembang.">
-        Aku memiliki kemampuan kuat dalam menvisualisasikan brief klien menjadi karya visual yang efektif seperti poster, ilustrasi, dan video. Selalu berkomitmen menghadirkan solusi kreatif yang inovatif dan semangat untuk terus berkembang.
-      </p>
-      <p data-en="Education: Bachelor's Degree in Visual Communication Design (DKV) — Universitas Dinamika Surabaya."
-         data-id="Pendidikan: Sarjana Desain Komunikasi Visual (DKV) — Universitas Dinamika Surabaya.">
-        Pendidikan: Sarjana Desain Komunikasi Visual (DKV) — Universitas Dinamika Surabaya.
-      </p>
-
-      <div class="skills-wrap">
-        <span class="skill-pill">Adobe Illustrator</span>
-        <span class="skill-pill">Adobe Photoshop</span>
-        <span class="skill-pill">Adobe Premiere Pro</span>
-        <span class="skill-pill">Figma</span>
-        <span class="skill-pill">Clip Studio Paint</span>
-        <span class="skill-pill">Paint Tool SAI</span>
-        <span class="skill-pill">CapCut</span>
-        <span class="skill-pill">Graphic Design</span>
-        <span class="skill-pill">Logo Design</span>
-        <span class="skill-pill">Illustration</span>
-        <span class="skill-pill">Video Editing</span>
-        <span class="skill-pill">Branding & Identity</span>
-        <span class="skill-pill">Social Media Design</span>
-        <span class="skill-pill">Infographic Design</span>
-      </div>
-    </div>
-
-    <div class="about-cards reveal">
-      <div class="about-card">
-        <div class="about-card-icon">📐</div>
-        <div>
-          <h3 data-en="Graphic Design & Branding" data-id="Desain Grafis & Branding">Desain Grafis & Branding</h3>
-          <p data-en="Designing posters, brochures, logos, and visual identities — from concept to final delivery. Experienced in rebranding for organizations and institutions."
-             data-id="Mendesain poster, brosur, logo, dan identitas visual — dari konsep hingga output final. Berpengalaman dalam rebranding organisasi dan institusi.">
-            Mendesain poster, brosur, logo, dan identitas visual — dari konsep hingga output final. Berpengalaman dalam rebranding organisasi dan institusi.
-          </p>
-        </div>
-      </div>
-      <div class="about-card">
-        <div class="about-card-icon">🎬</div>
-        <div>
-          <h3 data-en="Video Editing & Content" data-id="Video Editing & Konten">Video Editing & Konten</h3>
-          <p data-en="Editing promotional and campaign videos, TikTok content, thumbnails, and captions. Produced content for institutional and educational channels."
-             data-id="Mengedit video promosi dan kampanye, konten TikTok, thumbnail, dan caption. Memproduksi konten untuk kanal institusional dan edukatif.">
-            Mengedit video promosi dan kampanye, konten TikTok, thumbnail, dan caption. Memproduksi konten untuk kanal institusional dan edukatif.
-          </p>
-        </div>
-      </div>
-      <div class="about-card">
-        <div class="about-card-icon">🎨</div>
-        <div>
-          <h3 data-en="Illustration & Visual Art" data-id="Ilustrasi & Seni Visual">Ilustrasi & Seni Visual</h3>
-          <p data-en="Creating digital illustrations and comic strips with themes around student life and engineering. Proficient in Clip Studio Paint and Paint Tool SAI."
-             data-id="Membuat ilustrasi digital dan komik strip bertema kehidupan mahasiswa dan teknik. Mahir menggunakan Clip Studio Paint dan Paint Tool SAI.">
-            Membuat ilustrasi digital dan komik strip bertema kehidupan mahasiswa dan teknik. Mahir menggunakan Clip Studio Paint dan Paint Tool SAI.
-          </p>
-        </div>
-      </div>
-    </div>
-
+  <div class="portfolio-grid" id="portfolio-grid">
+    <!-- rendered by JS -->
   </div>
 </section>
 
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="reveal">
-    <div class="section-label" data-en="MY WORK" data-id="KARYA SAYA">KARYA SAYA</div>
-    <h2 class="section-title" data-en="Featured <span class='accent'>Portfolio</span>" data-id="Portofolio <span class='accent'>Pilihan</span>">Portofolio <span class="accent">Pilihan</span></h2>
-  </div>
-
-  <div class="filter-bar reveal">
-    <button class="filter-btn active" data-filter="all"      data-en="All Work"    data-id="Semua"       onclick="filterPort(this,'all')">Semua</button>
-    <button class="filter-btn"        data-filter="social"   data-en="Social Media" data-id="Media Sosial" onclick="filterPort(this,'social')">Media Sosial</button>
-    <button class="filter-btn"        data-filter="campaign" data-en="Campaign"    data-id="Kampanye"    onclick="filterPort(this,'campaign')">Kampanye</button>
-    <button class="filter-btn"        data-filter="edu"      data-en="Educational" data-id="Edukasi"     onclick="filterPort(this,'edu')">Edukasi</button>
-    <button class="filter-btn"        data-filter="event"    data-en="Event"       data-id="Event"       onclick="filterPort(this,'event')">Event</button>
-    <button class="filter-btn"        data-filter="promo"    data-en="Promotion"   data-id="Promosi"     onclick="filterPort(this,'promo')">Promosi</button>
-  </div>
-
-  <div class="portfolio-grid reveal">
-
-    <div class="port-item" data-cat="social promo" onclick="openLightbox('assets/ADS%20DKV.jpg')">
-      <div class="port-img"><img src="assets/ADS%20DKV.jpg" alt="ADS DKV" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Social Media · Ads" data-id="Media Sosial · Iklan">Media Sosial · Iklan</div>
-        <h3 data-en="DKV Ads Design" data-id="Desain Iklan DKV">Desain Iklan DKV</h3>
-        <p data-en="Promotional ad for the DKV department, optimized for Instagram placement."
-           data-id="Iklan promosi untuk jurusan DKV, dioptimalkan untuk penempatan Instagram.">Iklan promosi untuk jurusan DKV, dioptimalkan untuk penempatan Instagram.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="social" onclick="openLightbox('assets/CAROUSEL%20DKV-01.jpg')">
-      <div class="port-img"><img src="assets/CAROUSEL%20DKV-01.jpg" alt="Carousel DKV" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Carousel · Social Media" data-id="Carousel · Media Sosial">Carousel · Media Sosial</div>
-        <h3 data-en="DKV Instagram Carousel" data-id="Carousel Instagram DKV">Carousel Instagram DKV</h3>
-        <p data-en="Multi-slide carousel for DKV's Instagram — consistent branding, bold layout."
-           data-id="Carousel multi-slide untuk Instagram DKV — branding konsisten, layout bold.">Carousel multi-slide untuk Instagram DKV — branding konsisten, layout bold.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="edu social" onclick="openLightbox('assets/1%20HARI%201%20FAKTA-01.jpg')">
-      <div class="port-img"><img src="assets/1%20HARI%201%20FAKTA-01.jpg" alt="1 Hari 1 Fakta" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Educational Series · 6 Parts" data-id="Seri Edukasi · 6 Bagian">Seri Edukasi · 6 Bagian</div>
-        <h3 data-en="One Day One Fact" data-id="1 Hari 1 Fakta">1 Hari 1 Fakta</h3>
-        <p data-en="6-part daily educational series — bite-sized visuals for consistent daily engagement."
-           data-id="Seri edukasi harian 6 bagian — visual singkat untuk engagement harian yang konsisten.">Seri edukasi harian 6 bagian — visual singkat untuk engagement harian yang konsisten.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="campaign promo" onclick="openLightbox('assets/BEASISWA%20BEBAS%20SPP.jpg')">
-      <div class="port-img"><img src="assets/BEASISWA%20BEBAS%20SPP.jpg" alt="Beasiswa Bebas SPP" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Campaign · Education" data-id="Kampanye · Pendidikan">Kampanye · Pendidikan</div>
-        <h3 data-en="Tuition-Free Scholarship Campaign" data-id="Kampanye Beasiswa Bebas SPP">Kampanye Beasiswa Bebas SPP</h3>
-        <p data-en="High-impact visual for a scholarship campaign targeting prospective students."
-           data-id="Visual berdampak tinggi untuk kampanye beasiswa yang menyasar calon mahasiswa baru.">Visual berdampak tinggi untuk kampanye beasiswa yang menyasar calon mahasiswa baru.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="campaign" onclick="openLightbox('assets/BEASISWA%20PEMUDA%20TANGGUH-01.jpg')">
-      <div class="port-img"><img src="assets/BEASISWA%20PEMUDA%20TANGGUH-01.jpg" alt="Beasiswa Pemuda Tangguh" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Campaign · Youth · 3 Parts" data-id="Kampanye · Pemuda · 3 Bagian">Kampanye · Pemuda · 3 Bagian</div>
-        <h3 data-en="Youth Scholarship Campaign" data-id="Kampanye Beasiswa Pemuda Tangguh">Kampanye Beasiswa Pemuda Tangguh</h3>
-        <p data-en="3-part campaign with a unified visual identity targeting youth applicants."
-           data-id="Kampanye 3 bagian dengan identitas visual terpadu untuk pelamar pemuda.">Kampanye 3 bagian dengan identitas visual terpadu untuk pelamar pemuda.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="event" onclick="openLightbox('assets/PENYERAHAN%20PRESTASI-01.jpg')">
-      <div class="port-img"><img src="assets/PENYERAHAN%20PRESTASI-01.jpg" alt="Penyerahan Prestasi" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Event · 4 Parts" data-id="Event · 4 Bagian">Event · 4 Bagian</div>
-        <h3 data-en="Achievement Award Ceremony" data-id="Penyerahan Prestasi">Penyerahan Prestasi</h3>
-        <p data-en="Event visual series for an achievement award ceremony — announcement and recap posts."
-           data-id="Seri visual event untuk upacara penyerahan prestasi — posting pengumuman dan recap.">Seri visual event untuk upacara penyerahan prestasi — posting pengumuman dan recap.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="campaign social" onclick="openLightbox('assets/POSTER%20AYAH%20INI%20KEMANA-01.jpg')">
-      <div class="port-img"><img src="assets/POSTER%20AYAH%20INI%20KEMANA-01.jpg" alt="Poster Ayah Ini Kemana" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Social Campaign · 4 Parts" data-id="Kampanye Sosial · 4 Bagian">Kampanye Sosial · 4 Bagian</div>
-        <h3 data-en="Social Awareness Poster Series" data-id="Seri Poster Kampanye Sosial">Seri Poster Kampanye Sosial</h3>
-        <p data-en="4-part social awareness poster series with strong visual narrative and emotional tone."
-           data-id="Seri poster kesadaran sosial 4 bagian dengan narasi visual kuat dan tone emosional.">Seri poster kesadaran sosial 4 bagian dengan narasi visual kuat dan tone emosional.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="promo" onclick="openLightbox('assets/S2%20BISNIS%20DIGITAL-01.jpg')">
-      <div class="port-img"><img src="assets/S2%20BISNIS%20DIGITAL-01.jpg" alt="S2 Bisnis Digital" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Promotion · 5 Parts" data-id="Promosi · 5 Bagian">Promosi · 5 Bagian</div>
-        <h3 data-en="Digital Business Master's Promo" data-id="Promo S2 Bisnis Digital">Promo S2 Bisnis Digital</h3>
-        <p data-en="5-slide promotional series for a Master's program — structured for a full funnel launch."
-           data-id="Seri promosi 5 slide untuk program Magister — terstruktur untuk peluncuran full funnel.">Seri promosi 5 slide untuk program Magister — terstruktur untuk peluncuran full funnel.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="edu social" onclick="openLightbox('assets/SALAH%20JURUSAN-01.jpg')">
-      <div class="port-img"><img src="assets/SALAH%20JURUSAN-01.jpg" alt="Salah Jurusan" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Educational · Relatable" data-id="Edukasi · Relatable">Edukasi · Relatable</div>
-        <h3 data-en="Wrong Major? — Edu Series" data-id="Salah Jurusan? — Seri Edukasi">Salah Jurusan? — Seri Edukasi</h3>
-        <p data-en="Relatable educational content targeting prospective students — built to convert and inform."
-           data-id="Konten edukasi relatable untuk calon mahasiswa — dirancang untuk mengkonversi dan menginformasi.">Konten edukasi relatable untuk calon mahasiswa — dirancang untuk mengkonversi dan menginformasi.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="event promo" onclick="openLightbox('assets/PPT%20LAUNCHING%203%2B1.jpg')">
-      <div class="port-img"><img src="assets/PPT%20LAUNCHING%203%2B1.jpg" alt="PPT Launching 3+1" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Presentation Design" data-id="Desain Presentasi">Desain Presentasi</div>
-        <h3 data-en="3+1 Program Launch Deck" data-id="Deck Launching Program 3+1">Deck Launching Program 3+1</h3>
-        <p data-en="Full presentation deck for the official launch event of the 3+1 academic program."
-           data-id="Deck presentasi lengkap untuk acara peluncuran resmi program akademik 3+1.">Deck presentasi lengkap untuk acara peluncuran resmi program akademik 3+1.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="edu social" onclick="openLightbox('assets/STARTERPACK-01.jpg')">
-      <div class="port-img"><img src="assets/STARTERPACK-01.jpg" alt="Starterpack" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Social · Humor · 3 Parts" data-id="Sosial · Humor · 3 Bagian">Sosial · Humor · 3 Bagian</div>
-        <h3 data-en="Campus Starter Pack" data-id="Starter Pack Kampus">Starter Pack Kampus</h3>
-        <p data-en="Relatable 'starter pack' series designed to maximize shareability and organic reach."
-           data-id="Seri 'starter pack' relatable yang dirancang untuk memaksimalkan shareability dan jangkauan organik.">Seri 'starter pack' relatable yang dirancang untuk memaksimalkan shareability dan jangkauan organik.</p>
-      </div>
-    </div>
-
-    <div class="port-item" data-cat="promo" onclick="openLightbox('assets/PROMO%20APRIL-01.jpg')">
-      <div class="port-img"><img src="assets/PROMO%20APRIL-01.jpg" alt="Promo April" loading="lazy"></div>
-      <div class="port-info">
-        <div class="port-tag" data-en="Promotional · Monthly" data-id="Promosi · Bulanan">Promosi · Bulanan</div>
-        <h3 data-en="April Promotion Campaign" data-id="Kampanye Promo April">Kampanye Promo April</h3>
-        <p data-en="Monthly promotional design for institutional announcements — time-bound, high urgency."
-           data-id="Desain promosi bulanan untuk pengumuman institusional — terbatas waktu, urgensi tinggi.">Desain promosi bulanan untuk pengumuman institusional — terbatas waktu, urgensi tinggi.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- EXPERIENCE -->
-<section id="experience">
-  <div class="reveal">
-    <div class="section-label" data-en="JOURNEY" data-id="PERJALANAN">PERJALANAN</div>
-    <h2 class="section-title" data-en="My <span class='accent'>Experience</span>" data-id="<span class='accent'>Pengalaman</span> Saya"><span class="accent">Pengalaman</span> Saya</h2>
-  </div>
-
-  <div class="timeline reveal">
-
-    <div class="tl-item">
-      <div class="tl-date">Nov 2023 — <span data-en="Present" data-id="Sekarang">Sekarang</span> · 2 <span data-en="yrs" data-id="thn">thn</span></div>
-      <h3>Graphic Designer</h3>
-      <div class="tl-place">Universitas Dinamika · <span data-en="Contract · Surabaya" data-id="Kontrak · Surabaya">Kontrak · Surabaya</span></div>
-      <ul>
-        <li data-en="Designed posters, brochures, and banners for campus marketing." data-id="Mendesain poster, brosur, dan banner untuk kebutuhan marketing kampus.">Mendesain poster, brosur, dan banner untuk kebutuhan marketing kampus.</li>
-        <li data-en="Created engaging Instagram content aligned with campus branding." data-id="Membuat konten Instagram yang engaging dan sesuai dengan branding kampus.">Membuat konten Instagram yang engaging dan sesuai dengan branding kampus.</li>
-        <li data-en="Developed content plans, scripts, captions, and feed designs for @sapa.undika." data-id="Mengembangkan content plan, skrip, caption, dan desain feed untuk @sapa.undika.">Mengembangkan content plan, skrip, caption, dan desain feed untuk @sapa.undika.</li>
-        <li data-en="Edited promotional and campaign videos. Published on @universitasdinamika & @sapa.undika." data-id="Mengedit video promosi dan kampanye. Dipublikasikan di @universitasdinamika & @sapa.undika.">Mengedit video promosi dan kampanye. Dipublikasikan di @universitasdinamika & @sapa.undika.</li>
-      </ul>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-date">Jun 2021 — <span data-en="Dec" data-id="Des">Des</span> 2024 · 3 <span data-en="yrs" data-id="thn">thn</span> 7 <span data-en="mo" data-id="bln">bln</span></div>
-      <h3>Graphic Designer & Video Editor</h3>
-      <div class="tl-place">Engineering Academy · <span data-en="Freelance / Contract" data-id="Freelance / Kontrak">Freelance / Kontrak</span></div>
-      <ul>
-        <li data-en="Designed visual content and rebranded the Engineering Academy logo." data-id="Mendesain konten visual dan melakukan rebranding logo Engineering Academy.">Mendesain konten visual dan melakukan rebranding logo Engineering Academy.</li>
-        <li data-en="Edited educational TikTok videos; designed thumbnails and wrote captions." data-id="Mengedit video TikTok edukatif; mendesain thumbnail dan menulis caption.">Mengedit video TikTok edukatif; mendesain thumbnail dan menulis caption.</li>
-        <li data-en="Published on @anakteknikindo and @engineeringacademy.id." data-id="Dipublikasikan di @anakteknikindo dan @engineeringacademy.id.">Dipublikasikan di @anakteknikindo dan @engineeringacademy.id.</li>
-      </ul>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-date"><span data-en="May" data-id="Mei">Mei</span> 2021 — Sep 2022 · 1 <span data-en="yr" data-id="thn">thn</span> 5 <span data-en="mo" data-id="bln">bln</span></div>
-      <h3>Content Creator & Graphic Designer</h3>
-      <div class="tl-place">Tentor Saintek · <span data-en="Contract" data-id="Kontrak">Kontrak</span></div>
-      <ul>
-        <li data-en="Designed Instagram posts for UTBK education targeting high school and vocational students." data-id="Mendesain post Instagram untuk edukasi UTBK yang menyasar siswa SMA dan SMK.">Mendesain post Instagram untuk edukasi UTBK yang menyasar siswa SMA dan SMK.</li>
-        <li data-en="Rebranded the Tentor Saintek logo. (@tentorsaintek)" data-id="Melakukan rebranding logo Tentor Saintek. (@tentorsaintek)">Melakukan rebranding logo Tentor Saintek. (@tentorsaintek)</li>
-      </ul>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-date">Feb 2021 — Feb 2022 · 1 <span data-en="yr" data-id="thn">thn</span></div>
-      <h3>Junior Illustrator</h3>
-      <div class="tl-place">Engineering Academy · <span data-en="Contract" data-id="Kontrak">Kontrak</span></div>
-      <ul>
-        <li data-en="Created scripts and digital illustrations for comic strips." data-id="Membuat skrip dan ilustrasi digital untuk komik strip.">Membuat skrip dan ilustrasi digital untuk komik strip.</li>
-        <li data-en="Themes centered on engineering and student life. (@anakteknikindo)" data-id="Tema berpusat pada kehidupan teknik dan mahasiswa. (@anakteknikindo)">Tema berpusat pada kehidupan teknik dan mahasiswa. (@anakteknikindo)</li>
-      </ul>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-date">Jan 2019 — Feb 2024 · 5 <span data-en="yrs" data-id="thn">thn</span></div>
-      <h3>Freelance Graphic Designer & Illustrator</h3>
-      <div class="tl-place"><span data-en="Self-employed · @karimaaart" data-id="Mandiri · @karimaaart">Mandiri · @karimaaart</span></div>
-      <ul>
-        <li data-en="Offered design services: banners, posters, logos, illustrations, vectors, and video editing." data-id="Menawarkan layanan desain: banner, poster, logo, ilustrasi, vektor, dan video editing.">Menawarkan layanan desain: banner, poster, logo, ilustrasi, vektor, dan video editing.</li>
-      </ul>
-    </div>
-
-  </div>
-</section>
-
-<!-- AWARDS & CERTIFICATIONS -->
-<section id="recognition">
-  <div class="reveal">
-    <div class="section-label" data-en="RECOGNITION" data-id="PENGHARGAAN">PENGHARGAAN</div>
-    <h2 class="section-title"><span class="accent" data-en="Awards" data-id="Prestasi">Prestasi</span> & <span data-en="Certifications" data-id="Sertifikasi">Sertifikasi</span></h2>
-  </div>
-
-  <div class="recognition-grid reveal">
-
-    <div class="rec-card">
-      <div class="rec-icon">🥇</div>
-      <div>
-        <h3 data-en="1st Place — Mascot Design Competition" data-id="Juara 1 — Lomba Desain Maskot">Juara 1 — Lomba Desain Maskot</h3>
-        <div class="rec-meta">
-          <span class="rec-issuer" data-en="KPU Kota Pasuruan" data-id="KPU Kota Pasuruan">KPU Kota Pasuruan</span><br>
-          <span data-en="2024 Mayor & Deputy Mayor Election · Jun 2024" data-id="Pilkada Wali Kota & Wakil Wali Kota Pasuruan 2024 · Jun 2024">Pilkada Wali Kota & Wakil Wali Kota Pasuruan 2024 · Jun 2024</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rec-card">
-      <div class="rec-icon">🥇</div>
-      <div>
-        <h3 data-en="1st Place — Village Tourism Promotional Video Competition" data-id="Juara 1 — Lomba Video Promosi Wisata Desa">Juara 1 — Lomba Video Promosi Wisata Desa</h3>
-        <div class="rec-meta">
-          <span class="rec-issuer" data-en="Pemdes Sendang Duwur, Paciran, Lamongan" data-id="Pemdes Sendang Duwur, Kec. Paciran, Lamongan">Pemdes Sendang Duwur, Kec. Paciran, Lamongan</span><br>
-          <span data-en="Rebranding video for Sendang Duwur Village · Aug 2022" data-id="Video rebranding Desa Sendang Duwur · Agu 2022">Video rebranding Desa Sendang Duwur · Agu 2022</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rec-card cert">
-      <div class="rec-icon cert-icon">🏅</div>
-      <div>
-        <h3 data-en="Adobe Certified Professional" data-id="Adobe Certified Professional">Adobe Certified Professional</h3>
-        <div class="rec-meta">
-          <span class="rec-issuer">Adobe</span><br>
-          <span data-en="Adobe Photoshop · Oct 2023" data-id="Adobe Photoshop · Okt 2023">Adobe Photoshop · Okt 2023</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rec-card">
-      <div class="rec-icon">🏗️</div>
-      <div>
-        <h3 data-en="Village Rebranding Project — Sendang Duwur" data-id="Proyek Rebranding Desa Sendang Duwur">Proyek Rebranding Desa Sendang Duwur</h3>
-        <div class="rec-meta">
-          <span class="rec-issuer" data-en="Paciran, Lamongan · Apr–Jun 2022" data-id="Kec. Paciran, Kab. Lamongan · Apr–Jun 2022">Kec. Paciran, Kab. Lamongan · Apr–Jun 2022</span><br>
-          <span data-en="Logo redesign · Promotional video · Graphic Standard Manual (GSM) · Merchandise design" data-id="Redesain logo · Video promosi · Graphic Standard Manual (GSM) · Desain merchandise">Redesain logo · Video promosi · Graphic Standard Manual (GSM) · Desain merchandise</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
+<!-- ══ CONTACT ══ -->
+<section class="section" id="contact">
   <div class="contact-box reveal">
     <h2 data-en="Let's Create Something ✨" data-id="Ayo Ciptakan Sesuatu ✨">Ayo Ciptakan Sesuatu ✨</h2>
     <p data-en="Open for full-time roles, freelance projects, or creative collaborations in graphic design, social media, illustration, and video editing."
        data-id="Terbuka untuk posisi penuh waktu, proyek freelance, atau kolaborasi kreatif di bidang desain grafis, media sosial, ilustrasi, dan video editing.">
       Terbuka untuk posisi penuh waktu, proyek freelance, atau kolaborasi kreatif di bidang desain grafis, media sosial, ilustrasi, dan video editing.
     </p>
-    <div class="btn-group" style="justify-content:center; gap:14px;">
-      <a href="mailto:yourmail@gmail.com" class="btn btn-primary" data-en="Email Me" data-id="Kirim Email">Kirim Email</a>
-      <a href="https://www.linkedin.com/in/karimakurniasasi/" target="_blank" class="btn btn-outline" data-en="LinkedIn" data-id="LinkedIn">LinkedIn</a>
-      <a href="https://instagram.com/karimaaart" target="_blank" class="btn btn-outline" data-en="@karimaaart" data-id="@karimaaart">@karimaaart</a>
+    <div class="btn-group" style="justify-content:center;gap:12px">
+      <a href="mailto:dionisiusn1@gmail.com" class="btn btn-primary" data-en="Email Me" data-id="Kirim Email">Kirim Email</a>
+      <a href="https://www.linkedin.com/in/karimakurniasasi/" target="_blank" class="btn btn-outline">LinkedIn</a>
+      <a href="https://instagram.com/karimaaart" target="_blank" class="btn btn-outline">@karimaaart</a>
     </div>
   </div>
 </section>
 
 <footer>
-  <span data-en="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Illustrator" data-id="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator">© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator</span>
+  <span data-en="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Illustrator"
+        data-id="© 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator">
+    © 2026 Karima Kurnia Sasi — Graphic Designer · Video Editor · Ilustrator
+  </span>
 </footer>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <button class="lb-close" onclick="closeLightbox()">×</button>
-  <img id="lb-img" src="" alt="" onclick="event.stopPropagation()">
+<!-- ══ PDF VIEWER ══ -->
+<div class="pdf-overlay" id="pdf-overlay">
+  <div class="pdf-topbar">
+    <div class="pdf-title" id="pdf-title">—</div>
+    <div class="pdf-page-info" id="pdf-page-info">— / —</div>
+    <div class="pdf-controls">
+      <button class="pdf-btn" onclick="zoomOut()">－</button>
+      <span class="pdf-zoom-val" id="pdf-zoom-val">100%</span>
+      <button class="pdf-btn" onclick="zoomIn()">＋</button>
+      <a  id="pdf-download" href="" download class="pdf-btn" style="text-decoration:none">⬇ Unduh</a>
+      <button class="pdf-btn danger" onclick="closePdf()">✕ Tutup</button>
+    </div>
+  </div>
+  <div class="pdf-body" id="pdf-body">
+    <div class="pdf-loading" id="pdf-loading">
+      <div class="spinner"></div>
+      <span>Memuat PDF…</span>
+    </div>
+  </div>
 </div>
 
 <script>
+  /* ══ PDF.js WORKER ══ */
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+  /* ══ PORTFOLIO DATA ══
+     Isi dengan karya aslimu:
+     - thumb : URL gambar thumbnail (bisa dari Google Drive, Cloudinary, dll)
+     - pdf   : URL file PDF (Google Drive direct link, Dropbox, dll)
+     - cat   : kategori (harus cocok dengan key di CATS)
+  ════════════════════════════════════════════════════════════════ */
+  const CATS = [
+    { key:'all',          id:'Semua',                en:'All' },
+    { key:'social',       id:'Social Media',          en:'Social Media' },
+    { key:'poster',       id:'Poster',                en:'Poster' },
+    { key:'banner',       id:'Banner',                en:'Banner' },
+    { key:'branding',     id:'Branding & Logo',       en:'Branding & Logo' },
+    { key:'illustration', id:'Ilustrasi',             en:'Illustration' },
+    { key:'video',        id:'Video',                 en:'Video' },
+  ];
+
+  const PORTFOLIO = [
+    {
+      id: 1,
+      title_id: 'Social Media Campaign',
+      title_en: 'Social Media Campaign',
+      cat: 'social',
+      desc_id: 'Paket konten Instagram: feed, story, dan highlight cover untuk kampanye produk.',
+      desc_en: 'Instagram content pack: feed, story, and highlight cover for product campaigns.',
+      thumb: '',
+      pdf: ''
+    },
+    {
+      id: 2,
+      title_id: 'Poster Acara Kampus',
+      title_en: 'Campus Event Poster',
+      cat: 'poster',
+      desc_id: 'Seri poster acara universitas — hierarki tipografi dan ilustrasi orisinal.',
+      desc_en: 'University event poster series — typography hierarchy and original illustration.',
+      thumb: '',
+      pdf: ''
+    },
+    {
+      id: 3,
+      title_id: 'Branding & Identitas Visual',
+      title_en: 'Branding & Visual Identity',
+      cat: 'branding',
+      desc_id: 'Desain logo, panduan warna, tipografi, dan sistem identitas visual lengkap.',
+      desc_en: 'Logo design, color guide, typography, and full visual identity system.',
+      thumb: '',
+      pdf: ''
+    },
+  ];
+
+  /* ══ STATE ══ */
+  let currentLang = localStorage.getItem('lang') || 'id';
+  let currentCat  = 'all';
+  let pdfDoc      = null;
+  let pdfZoom     = 1.5;
+  let pdfUrl      = '';
+  let renderTask  = null;
+
+  /* ══ LANG ══ */
   function setLang(lang) {
+    currentLang = lang;
     document.documentElement.lang = lang;
     localStorage.setItem('lang', lang);
     document.querySelectorAll('[data-en]').forEach(el => {
-      const val = el.dataset[lang];
-      if (val) el.innerHTML = val;
+      const v = el.dataset[lang]; if (v) el.innerHTML = v;
     });
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
-    });
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === lang));
+    renderPills();
+    renderGrid();
   }
 
-  function filterPort(btn, cat) {
-    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    document.querySelectorAll('.port-item').forEach(item => {
-      const cats = (item.dataset.cat || '').split(' ');
-      item.classList.toggle('hidden', cat !== 'all' && !cats.includes(cat));
-    });
+  /* ══ FILTER PILLS ══ */
+  function renderPills() {
+    const pills = document.getElementById('filter-pills');
+    pills.innerHTML = CATS.map(c => {
+      const label = currentLang === 'id' ? c.id : c.en;
+      return `<button class="fpill${currentCat === c.key ? ' active' : ''}"
+                onclick="setFilter('${c.key}')">${label}</button>`;
+    }).join('');
+  }
+  function setFilter(key) {
+    currentCat = key;
+    renderPills();
+    renderGrid();
   }
 
-  function openLightbox(src) {
-    document.getElementById('lb-img').src = src;
-    document.getElementById('lightbox').classList.add('open');
+  /* ══ PORTFOLIO GRID ══ */
+  function catLabel(catKey) {
+    const c = CATS.find(x => x.key === catKey);
+    return c ? (currentLang === 'id' ? c.id : c.en) : catKey;
+  }
+
+  function renderGrid() {
+    const grid = document.getElementById('portfolio-grid');
+    const items = currentCat === 'all'
+      ? PORTFOLIO
+      : PORTFOLIO.filter(p => p.cat === currentCat);
+
+    if (!items.length) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted)">
+        <div style="font-size:2.5rem;opacity:.3;margin-bottom:12px">🎨</div>
+        <p style="font-size:.9rem">${currentLang==='id' ? 'Belum ada karya di kategori ini.' : 'No work in this category yet.'}</p>
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = items.map((p, i) => {
+      const title = currentLang === 'id' ? p.title_id : p.title_en;
+      const desc  = currentLang === 'id' ? p.desc_id  : p.desc_en;
+      const label = catLabel(p.cat);
+      const hasPdf = !!p.pdf;
+
+      const thumb = p.thumb
+        ? `<img src="${p.thumb}" alt="${title}" loading="lazy">`
+        : `<div class="p-thumb-empty">
+             <span>📄</span>
+             <span>PDF</span>
+           </div>`;
+
+      const cta = hasPdf
+        ? `<div class="p-cta">
+             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+             ${currentLang==='id' ? 'Buka PDF' : 'Open PDF'}
+           </div>`
+        : `<div class="p-cta-placeholder">
+             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+             ${currentLang==='id' ? 'PDF Segera Hadir' : 'PDF Coming Soon'}
+           </div>`;
+
+      return `<div class="p-card reveal" style="transition-delay:${i*0.08}s"
+                   ${hasPdf ? `onclick="openPdf('${p.pdf.replace(/'/g,"\\'")}','${title.replace(/'/g,"\\'")}')"`  : ''}>
+        <div class="p-thumb">
+          ${thumb}
+          ${hasPdf ? `<div class="p-pdf-badge">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            PDF
+          </div>` : ''}
+        </div>
+        <div class="p-body">
+          <span class="p-cat">${label}</span>
+          <div class="p-title">${title}</div>
+          <div class="p-desc">${desc}</div>
+          ${cta}
+        </div>
+      </div>`;
+    }).join('');
+
+    document.querySelectorAll('.p-card.reveal').forEach(el => obs.observe(el));
+  }
+
+  /* ══ PDF VIEWER ══ */
+  async function openPdf(url, title) {
+    pdfUrl = url;
+    pdfDoc = null;
+    pdfZoom = 1.5;
+
+    document.getElementById('pdf-title').textContent    = title;
+    document.getElementById('pdf-page-info').textContent = '— / —';
+    document.getElementById('pdf-zoom-val').textContent  = Math.round(pdfZoom * 100) + '%';
+    document.getElementById('pdf-download').href         = url;
+    document.getElementById('pdf-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
+
+    const body = document.getElementById('pdf-body');
+    body.innerHTML = `<div class="pdf-loading"><div class="spinner"></div><span>Memuat PDF…</span></div>`;
+
+    try {
+      pdfDoc = await pdfjsLib.getDocument(url).promise;
+      await renderAllPages(body);
+      watchPages(body);
+    } catch(e) {
+      body.innerHTML = `<div class="pdf-err">
+        <div style="font-size:2.5rem;opacity:.4">📄</div>
+        <strong style="color:var(--text)">Gagal memuat PDF</strong>
+        <p style="font-size:.83rem;max-width:320px;line-height:1.65">${e.message || 'Pastikan URL PDF bisa diakses publik.'}</p>
+        <a href="${url}" target="_blank" class="pdf-btn" style="margin-top:8px;text-decoration:none">Buka di tab baru ↗</a>
+      </div>`;
+    }
   }
-  function closeLightbox() {
-    document.getElementById('lightbox').classList.remove('open');
+
+  async function renderAllPages(body) {
+    body.innerHTML = '';
+    const total = pdfDoc.numPages;
+    document.getElementById('pdf-page-info').textContent = `1 / ${total}`;
+
+    for (let i = 1; i <= total; i++) {
+      const page     = await pdfDoc.getPage(i);
+      const viewport = page.getViewport({ scale: pdfZoom });
+      const canvas   = document.createElement('canvas');
+      canvas.className = 'pdf-page-canvas';
+      canvas.dataset.page = i;
+      canvas.width  = viewport.width;
+      canvas.height = viewport.height;
+      canvas.style.width = Math.min(viewport.width, window.innerWidth - 48) + 'px';
+
+      body.appendChild(canvas);
+
+      await page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise;
+    }
+  }
+
+  function watchPages(body) {
+    const total   = pdfDoc ? pdfDoc.numPages : 0;
+    const pageInfo = document.getElementById('pdf-page-info');
+    const canvases = body.querySelectorAll('.pdf-page-canvas');
+    if (!canvases.length) return;
+
+    const io = new IntersectionObserver(entries => {
+      let topmost = null;
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          if (!topmost || e.boundingClientRect.top < topmost.boundingClientRect.top) topmost = e;
+        }
+      });
+      if (topmost) pageInfo.textContent = `${topmost.target.dataset.page} / ${total}`;
+    }, { root: body, threshold: 0.3 });
+
+    canvases.forEach(c => io.observe(c));
+  }
+
+  function closePdf() {
+    document.getElementById('pdf-overlay').classList.remove('open');
+    document.getElementById('pdf-body').innerHTML = '';
     document.body.style.overflow = '';
+    pdfDoc = null;
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
 
-  const revealObs = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.08 });
-  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  async function reRender() {
+    if (!pdfDoc) return;
+    document.getElementById('pdf-zoom-val').textContent = Math.round(pdfZoom * 100) + '%';
+    const body = document.getElementById('pdf-body');
+    await renderAllPages(body);
+    watchPages(body);
+  }
 
-  window.addEventListener('scroll', () => {
-    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  function zoomIn()  { if (pdfZoom < 3)    { pdfZoom = Math.min(3, pdfZoom + 0.25);    reRender(); } }
+  function zoomOut() { if (pdfZoom > 0.5)  { pdfZoom = Math.max(0.5, pdfZoom - 0.25);  reRender(); } }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closePdf();
+    if (document.getElementById('pdf-overlay').classList.contains('open')) {
+      if (e.key === '+' || e.key === '=') { e.preventDefault(); zoomIn(); }
+      if (e.key === '-')                  { e.preventDefault(); zoomOut(); }
+    }
   });
 
-  setLang(localStorage.getItem('lang') || 'id');
-</script>
+  /* ══ SCROLL / REVEAL ══ */
+  const obs = new IntersectionObserver(es => {
+    es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold:.08 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
+  window.addEventListener('scroll', () =>
+    document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60));
+
+  /* ══ INIT ══ */
+  renderPills();
+  renderGrid();
+  setLang(currentLang);
+</script>
 </body>
 </html>
