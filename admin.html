@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin — Karima</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <style>
+    :root {
+      --bg:#0b1120; --surface:#111c34; --surface2:#1a2540; --surface3:#1f2d4a;
+      --blue:#3b82f6; --blue-lt:#60a5fa; --blue-dim:rgba(59,130,246,.12);
+      --text:#e2e8f0; --muted:#94a3b8; --border:rgba(255,255,255,.08);
+      --green:#22c55e;  --green-dim:rgba(34,197,94,.12);
+      --yellow:#f59e0b; --yellow-dim:rgba(245,158,11,.12);
+      --red:#ef4444;    --red-dim:rgba(239,68,68,.12);
+      --purple:#a855f7; --purple-dim:rgba(168,85,247,.12);
+      --orange:#f97316; --orange-dim:rgba(249,115,22,.12);
+      --teal:#14b8a6;   --teal-dim:rgba(20,184,166,.12);
+      --slate:#64748b;  --slate-dim:rgba(100,116,139,.12);
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Poppins',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+    a    { text-decoration:none; color:inherit; }
+
+    /* ── LOGIN ── */
+    #login-gate { position:fixed; inset:0; z-index:9000; background:var(--bg); display:flex; align-items:center; justify-content:center; }
+    #login-gate.hidden { display:none; }
+    .login-card {
+      background:var(--surface); border:1px solid var(--border); border-radius:24px;
+      padding:48px 40px; width:min(380px,90vw); text-align:center;
+      display:flex; flex-direction:column; align-items:center; gap:20px;
+    }
+    .login-logo { font-size:1.5rem; font-weight:800; color:var(--blue-lt); letter-spacing:-.03em; }
+    .login-logo span { color:var(--yellow); }
+    .login-card h2 { font-size:1.1rem; font-weight:700; }
+    .login-card p  { font-size:.82rem; color:var(--muted); line-height:1.6; }
+    .login-input-wrap { width:100%; position:relative; }
+    #login-input {
+      width:100%; padding:14px 48px 14px 18px;
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:12px; font-family:inherit; font-size:1.1rem;
+      color:var(--text); outline:none; text-align:center; letter-spacing:.2em; transition:.2s;
+    }
+    #login-input:focus { border-color:rgba(59,130,246,.5); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+    #login-input.error { border-color:var(--red); animation:shake .3s ease; }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+    .login-toggle { position:absolute; right:14px; top:50%; transform:translateY(-50%); background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; padding:4px; }
+    .login-err { font-size:.78rem; color:var(--red); min-height:18px; }
+    .btn-login { width:100%; padding:13px; border-radius:12px; background:var(--blue); color:white; font-weight:700; font-family:inherit; font-size:.9rem; cursor:pointer; border:none; transition:.2s; }
+    .btn-login:hover { background:#2563eb; }
+
+    /* ── NAV ── */
+    nav {
+      width:100%; position:sticky; top:0; z-index:100;
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding:14px 5%; backdrop-filter:blur(16px);
+      background:rgba(11,17,32,.9); border-bottom:1px solid var(--border);
+    }
+    .nav-logo { font-size:1.1rem; font-weight:800; color:var(--blue-lt); letter-spacing:-.03em; }
+    .nav-logo span { color:var(--yellow); }
+    .nav-right { display:flex; align-items:center; gap:8px; }
+    .nav-link {
+      font-size:.8rem; color:var(--muted); font-weight:600;
+      padding:7px 14px; border-radius:100px; border:1px solid var(--border);
+      transition:.2s; cursor:pointer; font-family:inherit; background:transparent;
+    }
+    .nav-link:hover { color:var(--blue-lt); border-color:rgba(96,165,250,.3); }
+    .nav-link.danger:hover { color:var(--red); border-color:rgba(239,68,68,.3); }
+
+    /* ── LAYOUT ── */
+    .page { max-width:1280px; margin:0 auto; padding:32px 5% 80px; }
+
+    /* ── TABS ── */
+    .tabs { display:flex; gap:6px; margin-bottom:28px; }
+    .tab-btn {
+      padding:9px 22px; border-radius:100px; font-size:.85rem; font-weight:700;
+      font-family:inherit; cursor:pointer; transition:.2s;
+      border:1px solid var(--border); background:transparent; color:var(--muted);
+    }
+    .tab-btn:hover  { color:var(--blue-lt); border-color:rgba(96,165,250,.3); }
+    .tab-btn.active { background:var(--blue); color:white; border-color:var(--blue); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    /* ── TOOLBAR ── */
+    .toolbar { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+    .toolbar-left  { display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
+    .toolbar-right { display:flex; gap:8px; flex-wrap:wrap; }
+
+    /* ── BUTTONS ── */
+    .btn {
+      padding:9px 18px; border-radius:11px; font-family:inherit;
+      font-size:.82rem; font-weight:600; cursor:pointer; transition:.2s; border:none;
+      display:inline-flex; align-items:center; gap:6px;
+    }
+    .btn-primary { background:var(--blue); color:white; }
+    .btn-primary:hover { background:#2563eb; }
+    .btn-green   { background:var(--green-dim); color:var(--green); border:1px solid rgba(34,197,94,.25); }
+    .btn-green:hover   { background:var(--green); color:#0b1120; }
+    .btn-export  { background:var(--purple-dim); color:var(--purple); border:1px solid rgba(168,85,247,.25); }
+    .btn-export:hover  { background:var(--purple); color:white; }
+    .btn-ghost   { background:transparent; color:var(--muted); border:1px solid var(--border); }
+    .btn-ghost:hover   { border-color:var(--blue-lt); color:var(--blue-lt); }
+    .btn-sm {
+      padding:6px 11px; border-radius:9px; font-family:inherit;
+      font-size:.74rem; font-weight:600; cursor:pointer; transition:.2s; border:none; white-space:nowrap;
+    }
+    .btn-edit  { background:var(--blue-dim); color:var(--blue-lt); }
+    .btn-edit:hover  { background:var(--blue); color:white; }
+    .btn-del   { background:var(--red-dim); color:var(--red); }
+    .btn-del:hover   { background:var(--red); color:white; }
+    .btn-next  { background:var(--surface2); color:var(--text); border:1px solid var(--border); flex:2; }
+    .btn-next:hover  { border-color:var(--green); color:var(--green); }
+    .btn-cancel-s { background:var(--orange-dim); color:var(--orange); }
+    .btn-cancel-s:hover { background:var(--red-dim); color:var(--red); }
+    .btn-terminal { background:var(--slate-dim); color:var(--slate); border:1px solid transparent; cursor:default; flex:2; font-size:.7rem; }
+
+    /* ── FILTER PILLS ── */
+    .pill {
+      padding:5px 13px; border-radius:100px; font-size:.74rem;
+      font-weight:600; font-family:inherit; cursor:pointer; transition:.2s;
+      border:1px solid var(--border); background:transparent; color:var(--muted); white-space:nowrap;
+    }
+    .pill:hover  { border-color:var(--blue-lt); color:var(--blue-lt); }
+    .pill.active { background:var(--blue); color:white; border-color:var(--blue); }
+
+    /* ── STATS BAR ── */
+    .stats-bar { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:28px; }
+    .stat-card { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:18px 20px; display:flex; flex-direction:column; gap:5px; }
+    .stat-card .label { font-size:.72rem; color:var(--muted); font-weight:600; text-transform:uppercase; letter-spacing:.07em; }
+    .stat-card .num   { font-size:1.9rem; font-weight:800; line-height:1; }
+    .stat-card .sub   { font-size:.72rem; color:var(--muted); }
+    .c-blue   { color:var(--blue-lt); }
+    .c-yellow { color:var(--yellow); }
+    .c-red    { color:var(--red); }
+    .c-green  { color:var(--green); }
+    .c-purple { color:var(--purple); }
+
+    /* ── GRIDS ── */
+    .cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+
+    /* ── PORTFOLIO CARD ── */
+    .p-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:18px; overflow:hidden; display:flex; flex-direction:column; transition:.2s;
+    }
+    .p-card:hover { border-color:rgba(59,130,246,.3); }
+    .p-thumb {
+      width:100%; aspect-ratio:16/9; background:var(--surface2);
+      overflow:hidden; position:relative; flex-shrink:0;
+    }
+    .p-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+    .p-thumb-empty {
+      width:100%; height:100%; display:flex; align-items:center;
+      justify-content:center; font-size:2rem; opacity:.2;
+    }
+    .p-body { padding:16px; flex:1; display:flex; flex-direction:column; gap:8px; }
+    .p-cat  { display:inline-block; font-size:.67rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; padding:3px 9px; border-radius:100px; background:var(--blue-dim); color:var(--blue-lt); }
+    .p-title { font-size:.9rem; font-weight:700; line-height:1.3; }
+    .p-desc  { font-size:.78rem; color:var(--muted); line-height:1.65; flex:1; }
+    .p-urls  { display:flex; flex-direction:column; gap:4px; margin-top:4px; }
+    .p-url-tag {
+      font-size:.7rem; color:var(--muted); display:flex; align-items:center; gap:5px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .p-url-tag a { color:var(--blue-lt); overflow:hidden; text-overflow:ellipsis; }
+    .p-url-tag a:hover { text-decoration:underline; }
+    .p-actions { display:flex; gap:6px; margin-top:12px; }
+
+    /* ── KPI CARD ── */
+    .kpi-card {
+      background:var(--surface); border:1px solid var(--border);
+      border-radius:18px; overflow:hidden; transition:.25s; display:flex; flex-direction:column;
+    }
+    .kpi-card:hover { border-color:rgba(59,130,246,.28); box-shadow:0 12px 28px rgba(0,0,0,.3); }
+    .kpi-card.cancelled { opacity:.55; }
+    .kpi-card.overdue   { border-color:rgba(239,68,68,.35); }
+    .kpi-body { padding:18px; flex:1; display:flex; flex-direction:column; gap:10px; }
+    .kpi-top  { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+    .kpi-title-wrap { flex:1; min-width:0; }
+    .kpi-title  { font-size:.92rem; font-weight:700; line-height:1.35; }
+    .kpi-client { font-size:.74rem; color:var(--muted); margin-top:2px; }
+    .status-badge { flex-shrink:0; padding:3px 10px; border-radius:100px; font-size:.67rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; white-space:nowrap; }
+    .s-Backlog      { background:var(--slate-dim);  color:var(--slate); }
+    .s-Todo         { background:var(--blue-dim);   color:var(--blue-lt); }
+    .s-InProgress   { background:var(--yellow-dim); color:var(--yellow); }
+    .s-Checking     { background:var(--purple-dim); color:var(--purple); }
+    .s-Revision     { background:var(--orange-dim); color:var(--orange); }
+    .s-Done         { background:var(--green-dim);  color:var(--green); }
+    .s-PublishPrint { background:var(--teal-dim);   color:var(--teal); }
+    .s-Cancelled    { background:var(--red-dim);    color:var(--red); }
+    .kpi-meta { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .meta-tag { font-size:.7rem; color:var(--muted); display:inline-flex; align-items:center; gap:4px; }
+    .meta-tag.overdue { color:var(--red); font-weight:600; }
+    .kpi-type-badge { display:inline-block; padding:2px 9px; border-radius:100px; font-size:.68rem; font-weight:600; background:var(--purple-dim); color:var(--purple); }
+    .kpi-url-link {
+      display:inline-flex; align-items:center; gap:5px; font-size:.75rem; color:var(--blue-lt);
+      font-weight:600; padding:4px 10px; border-radius:8px; background:var(--blue-dim);
+      border:1px solid rgba(59,130,246,.2); transition:.15s; width:fit-content;
+      max-width:100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .kpi-url-link:hover { background:var(--blue); color:white; }
+    .kpi-notes { font-size:.77rem; color:var(--muted); line-height:1.65; border-top:1px solid var(--border); padding-top:10px; }
+    .kpi-actions { display:flex; gap:6px; margin-top:auto; padding-top:12px; flex-wrap:wrap; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { grid-column:1/-1; text-align:center; padding:80px 20px; color:var(--muted); }
+    .empty-state .icon { font-size:3rem; margin-bottom:12px; opacity:.4; display:block; }
+    .empty-state p { font-size:.88rem; margin-top:6px; }
+
+    /* ── MODAL ── */
+    .modal-overlay { display:none; position:fixed; inset:0; z-index:500; background:rgba(0,0,0,.78); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:20px; }
+    .modal-overlay.open { display:flex; }
+    .modal { background:var(--surface); border:1px solid var(--border); border-radius:22px; width:min(640px,95vw); max-height:90vh; overflow-y:auto; display:flex; flex-direction:column; }
+    .modal-head { display:flex; align-items:center; justify-content:space-between; padding:20px 24px; border-bottom:1px solid var(--border); flex-shrink:0; position:sticky; top:0; background:var(--surface); z-index:1; }
+    .modal-head h3 { font-size:1rem; font-weight:700; }
+    .modal-close { background:transparent; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; padding:4px 8px; border-radius:8px; transition:.2s; }
+    .modal-close:hover { background:var(--surface2); color:var(--text); }
+    .modal-body { padding:24px; display:flex; flex-direction:column; gap:16px; }
+    .form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+    .form-group { display:flex; flex-direction:column; gap:6px; }
+    .form-group.full { grid-column:1/-1; }
+    label { font-size:.77rem; font-weight:600; color:var(--muted); }
+    input, select, textarea { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:10px 14px; font-family:inherit; font-size:.85rem; color:var(--text); transition:.2s; outline:none; }
+    input:focus, select:focus, textarea:focus { border-color:rgba(59,130,246,.5); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+    textarea { resize:vertical; min-height:72px; }
+    select option { background:var(--surface2); }
+    .modal-foot { display:flex; justify-content:flex-end; gap:10px; padding:16px 24px; border-top:1px solid var(--border); flex-shrink:0; position:sticky; bottom:0; background:var(--surface); }
+
+    /* ── CONFIRM ── */
+    .confirm-modal { background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:32px; width:min(380px,90vw); text-align:center; }
+    .confirm-modal h3 { font-size:1rem; font-weight:700; margin-bottom:8px; }
+    .confirm-modal p  { color:var(--muted); font-size:.85rem; margin-bottom:24px; line-height:1.65; }
+    .confirm-actions  { display:flex; gap:10px; justify-content:center; }
+
+    /* ── EXPORT CODE MODAL ── */
+    .export-code {
+      font-family:'Courier New', monospace; font-size:.75rem; line-height:1.6;
+      background:var(--surface2); border:1px solid var(--border);
+      border-radius:10px; padding:16px; white-space:pre-wrap; word-break:break-all;
+      max-height:300px; overflow-y:auto; color:#86efac; user-select:all;
+    }
+    .export-note { font-size:.78rem; color:var(--muted); line-height:1.65; }
+
+    /* ── TOAST ── */
+    .toast { position:fixed; bottom:28px; right:28px; z-index:9999; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 20px; font-size:.83rem; font-weight:600; display:flex; align-items:center; gap:8px; transform:translateY(80px); opacity:0; transition:.3s cubic-bezier(.34,1.56,.64,1); pointer-events:none; }
+    .toast.show { transform:translateY(0); opacity:1; }
+
+    /* ── GIST ── */
+    .sync-chip {
+      display:inline-flex; align-items:center; gap:5px;
+      padding:5px 12px; border-radius:100px; font-size:.72rem; font-weight:700;
+      border:1px solid var(--border); background:transparent; cursor:pointer;
+      font-family:inherit; transition:.2s; white-space:nowrap;
+    }
+    .sync-chip.idle    { color:var(--muted); }
+    .sync-chip.ok      { color:var(--green);  border-color:rgba(34,197,94,.3);  background:var(--green-dim); }
+    .sync-chip.syncing { color:var(--blue-lt);border-color:rgba(96,165,250,.3); background:var(--blue-dim); }
+    .sync-chip.error   { color:var(--red);    border-color:rgba(239,68,68,.3);  background:var(--red-dim); }
+    .sync-dot { width:7px; height:7px; border-radius:50%; background:currentColor; }
+    .sync-dot.spin { animation:spin .7s linear infinite; border-radius:0; clip-path:polygon(50% 0,100% 100%,0 100%); }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .gist-form-row { display:grid; grid-template-columns:1fr auto; gap:10px; align-items:end; }
+    .gist-form-row input { width:100%; }
+    code { font-family:'Courier New',monospace; background:var(--surface2); padding:2px 6px; border-radius:4px; font-size:.82em; color:var(--blue-lt); }
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:1100px) { .cards-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:640px)  {
+      .stats-bar { grid-template-columns:repeat(2,1fr); }
+      .cards-grid { grid-template-columns:1fr; }
+      .form-row { grid-template-columns:1fr; }
+      nav { padding:12px 4%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-gate">
+  <div class="login-card">
+    <div class="login-logo">karima.<span>admin</span></div>
+    <h2>Masukkan Password</h2>
+    <p>Halaman ini khusus untuk Karima.</p>
+    <div class="login-input-wrap">
+      <input id="login-input" type="password" inputmode="numeric" maxlength="20" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-toggle" onclick="toggleVis()">👁</button>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn-login" onclick="doLogin()">Masuk</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">karima.<span> admin</span></div>
+  <div class="nav-right">
+    <button class="sync-chip idle" id="sync-chip" onclick="openGistSettings()">
+      <span class="sync-dot" id="sync-dot"></span>
+      <span id="sync-label">Gist: belum terhubung</span>
+    </button>
+    <a href="index.html" class="nav-link">← Portfolio</a>
+    <a href="kpi.html"   class="nav-link">📊 KPI</a>
+    <button class="nav-link danger" onclick="logout()">Keluar</button>
+  </div>
+</nav>
+
+<!-- GIST SETTINGS MODAL -->
+<div class="modal-overlay" id="gist-modal" onclick="if(event.target===this)closeGistSettings()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>⚡ Koneksi GitHub Gist</h3>
+      <button class="modal-close" onclick="closeGistSettings()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="font-size:.82rem;color:var(--muted);line-height:1.7">
+        Data portfolio &amp; KPI disimpan ke GitHub Gist. Token tersimpan di browser kamu saja, tidak masuk ke kode.
+      </p>
+      <div class="form-group">
+        <label>Gist ID</label>
+        <input id="gs-gist-id" type="text" placeholder="ff1036f2cfe73d8108e59976d45181f6">
+      </div>
+      <div class="form-group">
+        <label>Personal Access Token (scope: gist)</label>
+        <div class="gist-form-row">
+          <input id="gs-token" type="password" placeholder="ghp_xxxxxxxxxxxxxx">
+          <button class="btn btn-ghost" style="white-space:nowrap" onclick="toggleTokenVis()">👁 Lihat</button>
+        </div>
+      </div>
+      <div id="gs-status" style="font-size:.8rem;min-height:20px;color:var(--muted)"></div>
+      <p style="font-size:.75rem;color:var(--muted);line-height:1.65">
+        Struktur Gist: 1 gist dengan 2 file — <code>portfolio-data.json</code> &amp; <code>kpi-data.json</code>
+      </p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeGistSettings()">Tutup</button>
+      <button class="btn btn-ghost" onclick="clearGistConfig()" style="color:var(--red)">Hapus Koneksi</button>
+      <button class="btn btn-primary" onclick="saveGistConfig()">Simpan &amp; Hubungkan</button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="page">
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('portfolio')">🖼 Portfolio</button>
+    <button class="tab-btn"        onclick="switchTab('kpi')">📊 KPI</button>
+  </div>
+
+  <!-- ══ PORTFOLIO TAB ══ -->
+  <div class="tab-panel active" id="tab-portfolio">
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <div id="p-filter-pills"></div>
+      </div>
+      <div class="toolbar-right">
+        <button class="btn btn-export" onclick="exportCode()">{'}'} Export Kode</button>
+        <button class="btn btn-primary" onclick="openPModal()">+ Tambah Karya</button>
+      </div>
+    </div>
+    <div class="cards-grid" id="p-grid"></div>
+  </div>
+
+  <!-- ══ KPI TAB ══ -->
+  <div class="tab-panel" id="tab-kpi">
+    <div class="stats-bar">
+      <div class="stat-card"><div class="label">Total</div><div class="num c-blue"  id="s-total">0</div><div class="sub">semua proyek</div></div>
+      <div class="stat-card"><div class="label">Aktif</div><div class="num c-yellow" id="s-active">0</div><div class="sub">sedang berjalan</div></div>
+      <div class="stat-card"><div class="label">Jatuh Tempo</div><div class="num c-red" id="s-due">0</div><div class="sub">dalam 3 hari</div></div>
+      <div class="stat-card"><div class="label">Selesai</div><div class="num c-green" id="s-done">0</div><div class="sub">Done + Publish/Print</div></div>
+    </div>
+    <div class="toolbar">
+      <div class="toolbar-left" id="k-filter-pills"></div>
+      <div class="toolbar-right">
+        <button class="btn btn-green" onclick="exportKpiPDF()">⬇ Export PDF</button>
+        <button class="btn btn-primary" onclick="openKModal()">+ Tambah Request</button>
+      </div>
+    </div>
+    <div class="cards-grid" id="k-grid"></div>
+  </div>
+</div>
+
+<!-- ══ PORTFOLIO MODAL ══ -->
+<div class="modal-overlay" id="p-modal" onclick="if(event.target===this)closePModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="p-modal-title">Tambah Karya</h3>
+      <button class="modal-close" onclick="closePModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Judul (Indonesia) *</label>
+          <input id="pf-title-id" type="text" placeholder="cth: Poster Wisuda 2026">
+        </div>
+        <div class="form-group">
+          <label>Title (English)</label>
+          <input id="pf-title-en" type="text" placeholder="cth: Graduation Poster 2026">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Kategori</label>
+          <select id="pf-cat">
+            <option value="social">Social Media</option>
+            <option value="poster">Poster</option>
+            <option value="banner">Banner</option>
+            <option value="branding">Branding & Logo</option>
+            <option value="illustration">Ilustrasi</option>
+            <option value="video">Video</option>
+            <option value="other">Lainnya</option>
+          </select>
+        </div>
+        <div class="form-group"><!-- spacer --></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Deskripsi (Indonesia)</label>
+          <textarea id="pf-desc-id" placeholder="Deskripsi singkat karya ini..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Description (English)</label>
+          <textarea id="pf-desc-en" placeholder="Brief description of this work..."></textarea>
+        </div>
+      </div>
+      <div class="form-group full">
+        <label>URL Thumbnail (gambar preview)</label>
+        <input id="pf-thumb" type="url" placeholder="https://drive.google.com/uc?id=...">
+      </div>
+      <div class="form-group full">
+        <label>URL PDF</label>
+        <input id="pf-pdf" type="url" placeholder="https://drive.google.com/uc?export=download&id=...">
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closePModal()">Batal</button>
+      <button class="btn btn-primary" onclick="savePItem()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ KPI MODAL ══ -->
+<div class="modal-overlay" id="k-modal" onclick="if(event.target===this)closeKModal()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="k-modal-title">Tambah Request</h3>
+      <button class="modal-close" onclick="closeKModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Nama Project *</label>
+        <input id="kf-title" type="text" placeholder="cth: Poster Wisuda 2026">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Klien / Instansi</label>
+          <input id="kf-client" type="text" placeholder="cth: BEM UNDIKA">
+        </div>
+        <div class="form-group">
+          <label>Tipe Output</label>
+          <select id="kf-type">
+            <option value="Softcopy">Softcopy</option>
+            <option value="Hardcopy">Hardcopy</option>
+            <option value="Keduanya">Keduanya</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Status</label>
+          <select id="kf-status">
+            <option value="Backlog">Backlog</option>
+            <option value="Todo">Todo</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Checking">Checking</option>
+            <option value="Revision">Revision</option>
+            <option value="Done">Done</option>
+            <option value="Publish/Print">Publish/Print</option>
+            <option value="Cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="form-group"><!-- spacer --></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Start Date</label>
+          <input id="kf-date-start" type="date">
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input id="kf-date-due" type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>URL Referensi / File</label>
+        <input id="kf-url" type="url" placeholder="https://drive.google.com/...">
+      </div>
+      <div class="form-group">
+        <label>Catatan / Brief</label>
+        <textarea id="kf-notes" placeholder="Detail brief, permintaan revisi, catatan khusus..."></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeKModal()">Batal</button>
+      <button class="btn btn-primary" onclick="saveKItem()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM -->
+<div class="modal-overlay" id="confirm-overlay">
+  <div class="confirm-modal">
+    <h3 id="confirm-title">Hapus Item?</h3>
+    <p>Tindakan ini tidak bisa dibatalkan.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-ghost" onclick="closeConfirm()">Batal</button>
+      <button class="btn" style="background:var(--red);color:white" onclick="confirmDelete()">Ya, Hapus</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXPORT CODE MODAL -->
+<div class="modal-overlay" id="export-modal" onclick="if(event.target===this)closeExport()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>Export Kode Portfolio</h3>
+      <button class="modal-close" onclick="closeExport()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="export-note">Salin kode di bawah ini, lalu tempel ke <code>index.html</code> menggantikan array <code>const PORTFOLIO = [...]</code>.</p>
+      <div class="export-code" id="export-code-content"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeExport()">Tutup</button>
+      <button class="btn btn-primary" onclick="copyCode()">Salin ke Clipboard</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toast-msg"></span></div>
+
+<script>
+  /* ══ GIST ══ */
+  const GIST_CFG_KEY = 'karima_gist_cfg';
+
+  function gistCfg()  { try { return JSON.parse(localStorage.getItem(GIST_CFG_KEY)) || {}; } catch { return {}; } }
+  function gistReady(){ const c=gistCfg(); return !!(c.gistId && c.token); }
+
+  function setSyncStatus(state, label) {
+    const chip = document.getElementById('sync-chip');
+    const dot  = document.getElementById('sync-dot');
+    const lbl  = document.getElementById('sync-label');
+    chip.className = `sync-chip ${state}`;
+    dot.className  = `sync-dot${state==='syncing'?' spin':''}`;
+    lbl.textContent = label;
+  }
+
+  async function gistRead(filename) {
+    const c = gistCfg();
+    if (!c.gistId || !c.token) return null;
+    try {
+      const r = await fetch(`https://api.github.com/gists/${c.gistId}`, {
+        headers:{ Authorization:`token ${c.token}`, Accept:'application/vnd.github.v3+json' }
+      });
+      if (!r.ok) return null;
+      const d = await r.json();
+      // save username for raw URL
+      if (d.owner?.login) {
+        const cfg = gistCfg(); cfg.username = d.owner.login;
+        localStorage.setItem(GIST_CFG_KEY, JSON.stringify(cfg));
+      }
+      if (!d.files[filename]) return null;
+      const parsed = JSON.parse(d.files[filename].content);
+      return parsed.items || parsed;
+    } catch { return null; }
+  }
+
+  async function gistWrite(filename, items) {
+    const c = gistCfg();
+    if (!c.gistId || !c.token) return false;
+    try {
+      const r = await fetch(`https://api.github.com/gists/${c.gistId}`, {
+        method:'PATCH',
+        headers:{ Authorization:`token ${c.token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+        body: JSON.stringify({ files:{ [filename]:{ content: JSON.stringify({items}, null, 2) } } })
+      });
+      return r.ok;
+    } catch { return false; }
+  }
+
+  async function syncToGist(portfolioItems, kpiItems) {
+    if (!gistReady()) return;
+    setSyncStatus('syncing', 'Menyimpan…');
+    const ok1 = portfolioItems !== null ? await gistWrite('portfolio-data.json', portfolioItems) : true;
+    const ok2 = kpiItems       !== null ? await gistWrite('kpi-data.json',       kpiItems)       : true;
+    if (ok1 && ok2) setSyncStatus('ok', 'Tersinkron ✓');
+    else            setSyncStatus('error', 'Gagal sync ✗');
+  }
+
+  /* Gist Settings UI */
+  function openGistSettings() {
+    const c = gistCfg();
+    document.getElementById('gs-gist-id').value = c.gistId || '';
+    document.getElementById('gs-token').value   = c.token  || '';
+    document.getElementById('gs-status').textContent = '';
+    document.getElementById('gist-modal').classList.add('open');
+  }
+  function closeGistSettings() { document.getElementById('gist-modal').classList.remove('open'); }
+  function toggleTokenVis() {
+    const inp = document.getElementById('gs-token');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+  async function saveGistConfig() {
+    const gistId = document.getElementById('gs-gist-id').value.trim();
+    const token  = document.getElementById('gs-token').value.trim();
+    const status = document.getElementById('gs-status');
+    if (!gistId || !token) { status.textContent = '⚠ Gist ID dan token wajib diisi.'; status.style.color='var(--red)'; return; }
+    status.textContent = '⟳ Menguji koneksi…'; status.style.color='var(--blue-lt)';
+    const cfg = { gistId, token };
+    localStorage.setItem(GIST_CFG_KEY, JSON.stringify(cfg));
+    // validate
+    const data = await gistRead('portfolio-data.json');
+    if (data === null) {
+      status.textContent = '✗ Gagal terhubung. Cek Gist ID dan token.'; status.style.color='var(--red)';
+      setSyncStatus('error', 'Error');
+      return;
+    }
+    status.textContent = '✓ Berhasil terhubung!'; status.style.color='var(--green)';
+    setSyncStatus('ok', 'Tersinkron ✓');
+    // load fresh data from gist
+    await loadFromGist();
+    setTimeout(closeGistSettings, 1200);
+  }
+  function clearGistConfig() {
+    localStorage.removeItem(GIST_CFG_KEY);
+    setSyncStatus('idle', 'Gist: belum terhubung');
+    showToast('Koneksi Gist dihapus', '#ef4444');
+    closeGistSettings();
+  }
+
+  async function loadFromGist() {
+    if (!gistReady()) return;
+    setSyncStatus('syncing', 'Memuat dari Gist…');
+    const [pItems, kItems] = await Promise.all([
+      gistRead('portfolio-data.json'),
+      gistRead('kpi-data.json'),
+    ]);
+    if (pItems !== null) {
+      pData = Array.isArray(pItems) ? pItems : [];
+      pSave(); renderPFilter(); renderPGrid();
+    }
+    if (kItems !== null) {
+      kData = Array.isArray(kItems) ? kItems : [];
+      kSave(); kRefresh();
+    }
+    setSyncStatus('ok', 'Tersinkron ✓');
+  }
+
+  /* ══ AUTH ══ */
+  const PASS = '20010120';
+  const AUTH_KEY = 'karima_admin_auth';
+
+  function checkAuth() { return sessionStorage.getItem(AUTH_KEY) === '1'; }
+  function doLogin() {
+    const val = document.getElementById('login-input').value;
+    const err = document.getElementById('login-err');
+    if (val === PASS) {
+      sessionStorage.setItem(AUTH_KEY, '1');
+      document.getElementById('login-gate').classList.add('hidden');
+      err.textContent = '';
+      init();
+    } else {
+      err.textContent = 'Password salah.';
+      const inp = document.getElementById('login-input');
+      inp.classList.add('error');
+      inp.value = '';
+      setTimeout(() => inp.classList.remove('error'), 600);
+      inp.focus();
+    }
+  }
+  function logout() { sessionStorage.removeItem(AUTH_KEY); location.reload(); }
+  function toggleVis() {
+    const inp = document.getElementById('login-input');
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+  }
+
+  /* ══ TABS ══ */
+  function switchTab(tab) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  /* ══ SHARED ══ */
+  let deleteTarget = null;
+  let deleteType   = null;
+  let toastTimer;
+
+  function showToast(msg, color='#22c55e') {
+    const t = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    t.style.borderColor = color + '55';
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+  }
+  function closeConfirm() {
+    document.getElementById('confirm-overlay').classList.remove('open');
+    deleteTarget = deleteType = null;
+  }
+  function confirmDelete() {
+    if (deleteType === 'portfolio') { deletePortfolio(deleteTarget); }
+    if (deleteType === 'kpi')       { deleteKpi(deleteTarget); }
+    closeConfirm();
+  }
+  function askDelete(id, type, name) {
+    deleteTarget = id; deleteType = type;
+    document.getElementById('confirm-title').textContent = `Hapus "${name}"?`;
+    document.getElementById('confirm-overlay').classList.add('open');
+  }
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closePModal(); closeKModal(); closeConfirm(); closeExport(); }
+  });
+
+  /* ════════════════════════════════════════
+     PORTFOLIO CRUD
+  ════════════════════════════════════════ */
+  const P_STORE = 'karima_portfolio_v1';
+  const P_CATS  = [
+    { key:'all',          label:'Semua' },
+    { key:'social',       label:'Social Media' },
+    { key:'poster',       label:'Poster' },
+    { key:'banner',       label:'Banner' },
+    { key:'branding',     label:'Branding & Logo' },
+    { key:'illustration', label:'Ilustrasi' },
+    { key:'video',        label:'Video' },
+    { key:'other',        label:'Lainnya' },
+  ];
+
+  let pData    = [];
+  let pEditId  = null;
+  let pFilter  = 'all';
+
+  function pLoad() {
+    try { pData = JSON.parse(localStorage.getItem(P_STORE)) || []; }
+    catch { pData = []; }
+  }
+  function pSave() {
+    localStorage.setItem(P_STORE, JSON.stringify(pData));
+    syncToGist(pData, null);
+  }
+
+  function catLabel(key) {
+    const c = P_CATS.find(x => x.key === key);
+    return c ? c.label : key;
+  }
+
+  function renderPFilter() {
+    const counts = {};
+    P_CATS.forEach(c => counts[c.key] = 0);
+    pData.forEach(d => { if (counts[d.cat] !== undefined) counts[d.cat]++; else counts['other'] = (counts['other']||0)+1; });
+    counts['all'] = pData.length;
+    document.getElementById('p-filter-pills').innerHTML = P_CATS.map(c =>
+      `<button class="pill${pFilter===c.key?' active':''}" onclick="setPFilter('${c.key}')">${c.label} (${counts[c.key]||0})</button>`
+    ).join('');
+  }
+  function setPFilter(key) { pFilter = key; renderPFilter(); renderPGrid(); }
+
+  function renderPGrid() {
+    const grid  = document.getElementById('p-grid');
+    const items = pFilter === 'all' ? pData : pData.filter(d => d.cat === pFilter);
+    if (!items.length) {
+      grid.innerHTML = `<div class="empty-state"><span class="icon">🖼</span><strong>Belum ada karya</strong><p>${pFilter==='all'?'Tambah karya pertamamu.':'Tidak ada karya di kategori ini.'}</p></div>`;
+      return;
+    }
+    grid.innerHTML = items.map((item, i) => `
+      <div class="p-card">
+        <div class="p-thumb">
+          ${item.thumb ? `<img src="${item.thumb}" alt="${item.title_id}" loading="lazy">` : `<div class="p-thumb-empty">🎨</div>`}
+        </div>
+        <div class="p-body">
+          <span class="p-cat">${catLabel(item.cat)}</span>
+          <div class="p-title">${item.title_id}</div>
+          ${item.title_en !== item.title_id ? `<div style="font-size:.75rem;color:var(--muted)">${item.title_en}</div>` : ''}
+          <div class="p-desc">${item.desc_id || ''}</div>
+          <div class="p-urls">
+            ${item.thumb ? `<div class="p-url-tag">🖼 <a href="${item.thumb}" target="_blank">Thumbnail</a></div>` : '<div class="p-url-tag" style="color:var(--red)">🖼 No thumbnail</div>'}
+            ${item.pdf   ? `<div class="p-url-tag">📄 <a href="${item.pdf}"   target="_blank">PDF</a></div>`       : '<div class="p-url-tag" style="color:var(--red)">📄 No PDF</div>'}
+          </div>
+          <div class="p-actions">
+            <button class="btn-sm btn-edit" onclick="openPModal('${item.id}')">Edit</button>
+            <button class="btn-sm btn-del"  onclick="askDelete('${item.id}','portfolio','${item.title_id.replace(/'/g,'\\\'') }')">Hapus</button>
+          </div>
+        </div>
+      </div>`
+    ).join('');
+  }
+
+  /* ── Portfolio Modal ── */
+  function openPModal(id = null) {
+    pEditId = id;
+    document.getElementById('p-modal-title').textContent = id ? 'Edit Karya' : 'Tambah Karya';
+    clearPForm();
+    if (id) {
+      const item = pData.find(d => d.id === id);
+      if (!item) return;
+      document.getElementById('pf-title-id').value = item.title_id || '';
+      document.getElementById('pf-title-en').value = item.title_en || '';
+      document.getElementById('pf-cat').value      = item.cat      || 'social';
+      document.getElementById('pf-desc-id').value  = item.desc_id  || '';
+      document.getElementById('pf-desc-en').value  = item.desc_en  || '';
+      document.getElementById('pf-thumb').value    = item.thumb    || '';
+      document.getElementById('pf-pdf').value      = item.pdf      || '';
+    }
+    document.getElementById('p-modal').classList.add('open');
+    setTimeout(() => document.getElementById('pf-title-id').focus(), 80);
+  }
+  function closePModal() { document.getElementById('p-modal').classList.remove('open'); pEditId = null; }
+  function clearPForm() {
+    ['pf-title-id','pf-title-en','pf-desc-id','pf-desc-en','pf-thumb','pf-pdf'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('pf-cat').value = 'social';
+  }
+  function savePItem() {
+    const title = document.getElementById('pf-title-id').value.trim();
+    if (!title) { showToast('⚠ Judul wajib diisi', '#f59e0b'); return; }
+    const item = {
+      id:       pEditId || Date.now().toString(),
+      title_id: title,
+      title_en: document.getElementById('pf-title-en').value.trim() || title,
+      cat:      document.getElementById('pf-cat').value,
+      desc_id:  document.getElementById('pf-desc-id').value.trim(),
+      desc_en:  document.getElementById('pf-desc-en').value.trim(),
+      thumb:    document.getElementById('pf-thumb').value.trim(),
+      pdf:      document.getElementById('pf-pdf').value.trim(),
+    };
+    if (pEditId) { const idx = pData.findIndex(d => d.id === pEditId); if (idx > -1) pData[idx] = item; }
+    else pData.unshift(item);
+    pSave(); renderPFilter(); renderPGrid(); closePModal();
+    showToast(pEditId ? '✓ Karya diperbarui' : '✓ Karya ditambahkan');
+  }
+  function deletePortfolio(id) {
+    pData = pData.filter(d => d.id !== id);
+    pSave(); renderPFilter(); renderPGrid();
+    showToast('🗑 Karya dihapus', '#ef4444');
+  }
+
+  /* ── Export Code ── */
+  function exportCode() {
+    const arr = pData.map(item => ({
+      id:       parseInt(item.id) || item.id,
+      title_id: item.title_id,
+      title_en: item.title_en,
+      cat:      item.cat,
+      desc_id:  item.desc_id,
+      desc_en:  item.desc_en,
+      thumb:    item.thumb,
+      pdf:      item.pdf,
+    }));
+    const code = 'const PORTFOLIO = ' + JSON.stringify(arr, null, 2) + ';';
+    document.getElementById('export-code-content').textContent = code;
+    document.getElementById('export-modal').classList.add('open');
+  }
+  function closeExport() { document.getElementById('export-modal').classList.remove('open'); }
+  function copyCode() {
+    const text = document.getElementById('export-code-content').textContent;
+    navigator.clipboard.writeText(text).then(() => showToast('✓ Tersalin ke clipboard'));
+  }
+
+  /* ════════════════════════════════════════
+     KPI CRUD
+  ════════════════════════════════════════ */
+  const K_STORE    = 'karima_kpi_v2';
+  const K_STATUSES = ['Backlog','Todo','In Progress','Checking','Revision','Done','Publish/Print','Cancelled'];
+  const K_FLOW     = ['Backlog','Todo','In Progress','Checking','Revision','Done','Publish/Print'];
+  const K_TERMINAL = new Set(['Done','Publish/Print','Cancelled']);
+
+  let kData   = [];
+  let kEditId = null;
+  let kFilter = 'all';
+
+  function kLoad() { try { kData = JSON.parse(localStorage.getItem(K_STORE)) || []; } catch { kData = []; } }
+  function kSave() {
+    localStorage.setItem(K_STORE, JSON.stringify(kData));
+    syncToGist(null, kData);
+  }
+  function statusKey(s) { return s.replace(/[^a-zA-Z]/g,''); }
+
+  function updateKStats() {
+    const now = new Date(); now.setHours(0,0,0,0);
+    const in3 = new Date(now); in3.setDate(in3.getDate()+3);
+    const dueSoon = kData.filter(d => {
+      if (!d.dateDue || K_TERMINAL.has(d.status)) return false;
+      const dd = new Date(d.dateDue); dd.setHours(0,0,0,0);
+      return dd <= in3;
+    }).length;
+    document.getElementById('s-total').textContent  = kData.length;
+    document.getElementById('s-active').textContent = kData.filter(d => !K_TERMINAL.has(d.status)).length;
+    document.getElementById('s-due').textContent    = dueSoon;
+    document.getElementById('s-done').textContent   = kData.filter(d => d.status==='Done'||d.status==='Publish/Print').length;
+  }
+
+  function renderKFilter() {
+    const counts = {};
+    K_STATUSES.forEach(s => counts[s] = 0);
+    kData.forEach(d => { if (counts[d.status]!==undefined) counts[d.status]++; });
+    const allBtn = `<button class="pill${kFilter==='all'?' active':''}" onclick="setKFilter('all')">Semua (${kData.length})</button>`;
+    const pills  = K_STATUSES.map(s =>
+      `<button class="pill${kFilter===s?' active':''}" onclick="setKFilter('${s.replace(/\//g,'\\/')}')">${s} (${counts[s]})</button>`
+    ).join('');
+    document.getElementById('k-filter-pills').innerHTML = allBtn + pills;
+  }
+  function setKFilter(f) { kFilter = f; renderKFilter(); renderKGrid(); }
+
+  function fmtDate(d) { if (!d) return '—'; const [y,m,day]=d.split('-'); return `${day}/${m}/${y}`; }
+  function isOverdue(item) {
+    if (!item.dateDue || K_TERMINAL.has(item.status)) return false;
+    const now=new Date();now.setHours(0,0,0,0);
+    const dd=new Date(item.dateDue);dd.setHours(0,0,0,0);
+    return dd < now;
+  }
+  function isDueSoon(item) {
+    if (!item.dateDue || K_TERMINAL.has(item.status)) return false;
+    const now=new Date();now.setHours(0,0,0,0);
+    const in3=new Date(now);in3.setDate(in3.getDate()+3);
+    const dd=new Date(item.dateDue);dd.setHours(0,0,0,0);
+    return dd>=now && dd<=in3;
+  }
+  function truncUrl(url) {
+    if (!url) return '';
+    try { const u=new URL(url); return (u.hostname+u.pathname).slice(0,38)+(u.hostname.length+u.pathname.length>38?'…':''); }
+    catch { return url.slice(0,38)+(url.length>38?'…':''); }
+  }
+
+  function renderKGrid() {
+    const grid     = document.getElementById('k-grid');
+    const filtered = kFilter==='all' ? kData : kData.filter(d=>d.status===kFilter);
+    if (!filtered.length) {
+      grid.innerHTML = `<div class="empty-state"><span class="icon">📋</span><strong>Belum ada data</strong><p>${kFilter==='all'?'Tambah request desain pertamamu.':`Tidak ada item status "${kFilter}".`}</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map(item => {
+      const overdue = isOverdue(item);
+      const dueSoon = !overdue && isDueSoon(item);
+      const terminal= K_TERMINAL.has(item.status);
+      const sk      = statusKey(item.status);
+      const nextIdx = K_FLOW.indexOf(item.status);
+      const nextSt  = nextIdx>=0 && nextIdx<K_FLOW.length-1 ? K_FLOW[nextIdx+1] : null;
+      const cardCls = ['kpi-card', item.status==='Cancelled'?'cancelled':'', overdue?'overdue':''].filter(Boolean).join(' ');
+      const dueLabel = overdue
+        ? `<span class="meta-tag overdue">⚠ Terlambat ${fmtDate(item.dateDue)}</span>`
+        : dueSoon
+          ? `<span class="meta-tag" style="color:var(--yellow)">⏰ ${fmtDate(item.dateDue)}</span>`
+          : item.dateDue ? `<span class="meta-tag">📅 ${fmtDate(item.dateDue)}</span>` : '';
+      const actions = terminal
+        ? `<button class="btn-sm btn-terminal" disabled>${item.status==='Cancelled'?'✕ Cancelled':'✓ Selesai'}</button>
+           <button class="btn-sm btn-edit" onclick="openKModal('${item.id}')">Edit</button>
+           <button class="btn-sm btn-del"  onclick="askDelete('${item.id}','kpi','${item.title.replace(/'/g,"\\'")}')">Hapus</button>`
+        : `<button class="btn-sm btn-next" onclick="kNextStatus('${item.id}')">→ ${nextSt||'—'}</button>
+           <button class="btn-sm btn-edit" onclick="openKModal('${item.id}')">Edit</button>
+           <button class="btn-sm btn-cancel-s" onclick="kCancel('${item.id}')">✕</button>
+           <button class="btn-sm btn-del"  onclick="askDelete('${item.id}','kpi','${item.title.replace(/'/g,"\\'")}')">Hapus</button>`;
+      return `
+        <div class="${cardCls}">
+          <div class="kpi-body">
+            <div class="kpi-top">
+              <div class="kpi-title-wrap">
+                <div class="kpi-title">${item.title}</div>
+                <div class="kpi-client">${item.client||''}</div>
+              </div>
+              <span class="status-badge s-${sk}">${item.status}</span>
+            </div>
+            <div class="kpi-meta">
+              <span class="kpi-type-badge">${item.type}</span>
+              ${item.dateStart?`<span class="meta-tag">🗓 ${fmtDate(item.dateStart)}</span>`:''}
+              ${dueLabel}
+            </div>
+            ${item.url?`<a href="${item.url}" target="_blank" rel="noopener" class="kpi-url-link">🔗 ${truncUrl(item.url)}</a>`:''}
+            ${item.notes?`<div class="kpi-notes">${item.notes}</div>`:''}
+            <div class="kpi-actions">${actions}</div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  /* ── KPI Modal ── */
+  function openKModal(id=null) {
+    kEditId = id;
+    document.getElementById('k-modal-title').textContent = id ? 'Edit Request' : 'Tambah Request';
+    clearKForm();
+    if (id) {
+      const item = kData.find(d=>d.id===id); if (!item) return;
+      document.getElementById('kf-title').value      = item.title     || '';
+      document.getElementById('kf-client').value     = item.client    || '';
+      document.getElementById('kf-type').value       = item.type      || 'Softcopy';
+      document.getElementById('kf-status').value     = item.status    || 'Backlog';
+      document.getElementById('kf-date-start').value = item.dateStart || '';
+      document.getElementById('kf-date-due').value   = item.dateDue   || '';
+      document.getElementById('kf-url').value        = item.url       || '';
+      document.getElementById('kf-notes').value      = item.notes     || '';
+    }
+    document.getElementById('k-modal').classList.add('open');
+    setTimeout(() => document.getElementById('kf-title').focus(), 80);
+  }
+  function closeKModal() { document.getElementById('k-modal').classList.remove('open'); kEditId=null; }
+  function clearKForm() {
+    ['kf-title','kf-client','kf-date-start','kf-date-due','kf-url','kf-notes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('kf-type').value='Softcopy';
+    document.getElementById('kf-status').value='Backlog';
+  }
+  function saveKItem() {
+    const title = document.getElementById('kf-title').value.trim();
+    if (!title) { showToast('⚠ Nama project wajib diisi','#f59e0b'); return; }
+    const item = {
+      id:        kEditId||Date.now().toString(),
+      title,
+      client:    document.getElementById('kf-client').value.trim(),
+      type:      document.getElementById('kf-type').value,
+      status:    document.getElementById('kf-status').value,
+      dateStart: document.getElementById('kf-date-start').value,
+      dateDue:   document.getElementById('kf-date-due').value,
+      url:       document.getElementById('kf-url').value.trim(),
+      notes:     document.getElementById('kf-notes').value.trim(),
+    };
+    if (kEditId) { const idx=kData.findIndex(d=>d.id===kEditId); if(idx>-1) kData[idx]=item; }
+    else kData.unshift(item);
+    kSave(); kRefresh(); closeKModal();
+    showToast(kEditId?'✓ Request diperbarui':'✓ Request ditambahkan');
+  }
+  function kNextStatus(id) {
+    const item=kData.find(d=>d.id===id); if(!item) return;
+    const idx=K_FLOW.indexOf(item.status);
+    if(idx<0||idx>=K_FLOW.length-1) return;
+    item.status=K_FLOW[idx+1]; kSave(); kRefresh();
+    showToast(`→ ${item.status}`);
+  }
+  function kCancel(id) {
+    const item=kData.find(d=>d.id===id); if(!item) return;
+    item.status='Cancelled'; kSave(); kRefresh();
+    showToast('✕ Dibatalkan','#ef4444');
+  }
+  function deleteKpi(id) {
+    kData=kData.filter(d=>d.id!==id); kSave(); kRefresh();
+    showToast('🗑 Dihapus','#ef4444');
+  }
+  function kRefresh() { updateKStats(); renderKFilter(); renderKGrid(); }
+
+  /* ── Export KPI PDF ── */
+  function exportKpiPDF() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation:'landscape', unit:'mm', format:'a4' });
+    const exportData = kFilter==='all' ? kData : kData.filter(d=>d.status===kFilter);
+    if (!exportData.length) { showToast('⚠ Tidak ada data','#f59e0b'); return; }
+    const now=new Date();
+    const dateStr=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});
+    doc.setFillColor(11,17,32); doc.rect(0,0,297,32,'F');
+    doc.setTextColor(96,165,250); doc.setFontSize(17); doc.setFont('helvetica','bold');
+    doc.text('KARIMA KURNIA SASI',14,13);
+    doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(148,163,184);
+    doc.text('Design KPI Report',14,20); doc.text(`Export: ${dateStr}`,14,27);
+    doc.setTextColor(96,165,250);
+    doc.text(kFilter==='all'?'Semua Request':`Filter: ${kFilter}`,230,27);
+    const in3=new Date(now);in3.setDate(in3.getDate()+3);
+    const statsBoxes=[
+      {label:'Total',       val:kData.length,                                                                            x:14},
+      {label:'Aktif',       val:kData.filter(d=>!K_TERMINAL.has(d.status)).length,                                       x:80},
+      {label:'Due ≤3 hari', val:kData.filter(d=>{if(!d.dateDue||K_TERMINAL.has(d.status))return false;const dd=new Date(d.dateDue);dd.setHours(0,0,0,0);const n=new Date();n.setHours(0,0,0,0);return dd<=in3;}).length, x:146},
+      {label:'Selesai',     val:kData.filter(d=>d.status==='Done'||d.status==='Publish/Print').length,                   x:212},
+    ];
+    statsBoxes.forEach(s=>{
+      doc.setFillColor(17,28,52); doc.roundedRect(s.x,35,60,18,3,3,'F');
+      doc.setTextColor(226,232,240);doc.setFontSize(7);doc.setFont('helvetica','normal');doc.text(s.label,s.x+4,40);
+      doc.setTextColor(96,165,250);doc.setFontSize(14);doc.setFont('helvetica','bold');doc.text(String(s.val),s.x+4,50);
+    });
+    const statusColor={'Backlog':[100,116,139],'Todo':[96,165,250],'In Progress':[245,158,11],'Checking':[168,85,247],'Revision':[249,115,22],'Done':[34,197,94],'Publish/Print':[20,184,166],'Cancelled':[239,68,68]};
+    const rows=exportData.map(item=>[item.title,item.client||'—',item.type,item.status,fmtDate(item.dateStart),fmtDate(item.dateDue),item.url?item.url.slice(0,50):'—',item.notes?item.notes.slice(0,80):'—']);
+    doc.autoTable({
+      startY:57,
+      head:[['Project','Klien','Tipe','Status','Start','Due','URL','Catatan']],
+      body:rows,
+      styles:{font:'helvetica',fontSize:7.5,cellPadding:3.5,fillColor:[17,28,52],textColor:[226,232,240],lineColor:[30,41,70],lineWidth:.3,overflow:'linebreak'},
+      headStyles:{fillColor:[59,130,246],textColor:[255,255,255],fontStyle:'bold',fontSize:7.5},
+      alternateRowStyles:{fillColor:[26,37,64]},
+      columnStyles:{0:{cellWidth:48},1:{cellWidth:32},2:{cellWidth:22},3:{cellWidth:28},4:{cellWidth:22},5:{cellWidth:22},6:{cellWidth:45},7:{cellWidth:'auto'}},
+      didParseCell(h){if(h.column.index===3){h.cell.styles.textColor=statusColor[h.cell.raw]||[226,232,240];h.cell.styles.fontStyle='bold';}},
+      margin:{left:14,right:14},
+    });
+    const pages=doc.internal.getNumberOfPages();
+    for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFontSize(7);doc.setTextColor(148,163,184);doc.text(`karimakurniasasi.github.io · halaman ${i} dari ${pages}`,14,doc.internal.pageSize.height-6);}
+    const filename=`KPI_Karima_${now.toISOString().split('T')[0]}.pdf`;
+    doc.save(filename); showToast(`📄 ${filename}`);
+  }
+
+  /* ══ INIT ══ */
+  async function init() {
+    pLoad(); renderPFilter(); renderPGrid();
+    kLoad(); kRefresh();
+    if (gistReady()) {
+      setSyncStatus('syncing', 'Memuat dari Gist…');
+      await loadFromGist();
+    } else {
+      setSyncStatus('idle', 'Gist: belum terhubung');
+    }
+  }
+
+  if (checkAuth()) {
+    document.getElementById('login-gate').classList.add('hidden');
+    init();
+  }
+</script>
+</body>
+</html>

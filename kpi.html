@@ -501,6 +501,36 @@
     inp.type = inp.type === 'password' ? 'text' : 'password';
   }
 
+  /* ── GIST ── */
+  const GIST_CFG_KEY = 'karima_gist_cfg';
+  function gistCfg()  { try { return JSON.parse(localStorage.getItem(GIST_CFG_KEY)) || {}; } catch { return {}; } }
+  function gistReady(){ const c=gistCfg(); return !!(c.gistId && c.token); }
+
+  async function gistRead() {
+    const c = gistCfg(); if (!c.gistId||!c.token) return null;
+    try {
+      const r = await fetch(`https://api.github.com/gists/${c.gistId}`,
+        { headers:{ Authorization:`token ${c.token}`, Accept:'application/vnd.github.v3+json' } });
+      if (!r.ok) return null;
+      const d = await r.json();
+      if (d.owner?.login) { const cfg=gistCfg(); cfg.username=d.owner.login; localStorage.setItem(GIST_CFG_KEY,JSON.stringify(cfg)); }
+      if (!d.files['kpi-data.json']) return null;
+      const p = JSON.parse(d.files['kpi-data.json'].content);
+      return p.items || p;
+    } catch { return null; }
+  }
+
+  async function gistWrite() {
+    const c = gistCfg(); if (!c.gistId||!c.token) return;
+    try {
+      await fetch(`https://api.github.com/gists/${c.gistId}`, {
+        method:'PATCH',
+        headers:{ Authorization:`token ${c.token}`, Accept:'application/vnd.github.v3+json', 'Content-Type':'application/json' },
+        body: JSON.stringify({ files:{ 'kpi-data.json':{ content: JSON.stringify({items:data},null,2) } } })
+      });
+    } catch {}
+  }
+
   /* ── DATA ── */
   const STORE_KEY = 'karima_kpi_v2';
   let data = [];
@@ -518,7 +548,10 @@
     try { data = JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
     catch { data = []; }
   }
-  function save() { localStorage.setItem(STORE_KEY, JSON.stringify(data)); }
+  function save() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    gistWrite();
+  }
 
   /* ── STATS ── */
   function updateStats() {
@@ -905,9 +938,16 @@
   }
 
   /* ── INIT ── */
-  function init() {
-    load();
-    refresh();
+  async function init() {
+    load(); refresh();
+    if (gistReady()) {
+      const items = await gistRead();
+      if (items !== null) {
+        data = Array.isArray(items) ? items : [];
+        localStorage.setItem(STORE_KEY, JSON.stringify(data));
+        refresh();
+      }
+    }
   }
 
   if (checkAuth()) {

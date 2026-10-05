@@ -328,6 +328,7 @@
     <a class="nav-link" href="#contact"   data-en="Contact"   data-id="Kontak">Kontak</a>
   </div>
   <div class="nav-right">
+    <a href="admin.html" class="kpi-btn" style="background:var(--surface2);color:var(--muted);border-color:var(--border)">⚙ Admin</a>
     <a href="kpi.html" class="kpi-btn">📊 KPI</a>
     <div class="lang-toggle">
       <button class="lang-btn" data-lang="id" onclick="setLang('id')">ID</button>
@@ -468,38 +469,17 @@
     { key:'video',        id:'Video',                 en:'Video' },
   ];
 
-  const PORTFOLIO = [
-    {
-      id: 1,
-      title_id: 'Social Media Campaign',
-      title_en: 'Social Media Campaign',
-      cat: 'social',
-      desc_id: 'Paket konten Instagram: feed, story, dan highlight cover untuk kampanye produk.',
-      desc_en: 'Instagram content pack: feed, story, and highlight cover for product campaigns.',
-      thumb: '',
-      pdf: ''
-    },
-    {
-      id: 2,
-      title_id: 'Poster Acara Kampus',
-      title_en: 'Campus Event Poster',
-      cat: 'poster',
-      desc_id: 'Seri poster acara universitas — hierarki tipografi dan ilustrasi orisinal.',
-      desc_en: 'University event poster series — typography hierarchy and original illustration.',
-      thumb: '',
-      pdf: ''
-    },
-    {
-      id: 3,
-      title_id: 'Branding & Identitas Visual',
-      title_en: 'Branding & Visual Identity',
-      cat: 'branding',
-      desc_id: 'Desain logo, panduan warna, tipografi, dan sistem identitas visual lengkap.',
-      desc_en: 'Logo design, color guide, typography, and full visual identity system.',
-      thumb: '',
-      pdf: ''
-    },
+  /* Baca dari localStorage (diisi via admin.html), fallback ke placeholder */
+  const PORTFOLIO_DEFAULT = [
+    { id:'1', title_id:'Social Media Campaign',      title_en:'Social Media Campaign',       cat:'social',    desc_id:'Paket konten Instagram: feed, story, dan highlight cover untuk kampanye produk.', desc_en:'Instagram content pack: feed, story, and highlight cover for product campaigns.', thumb:'', pdf:'' },
+    { id:'2', title_id:'Poster Acara Kampus',         title_en:'Campus Event Poster',          cat:'poster',    desc_id:'Seri poster acara universitas — hierarki tipografi dan ilustrasi orisinal.',       desc_en:'University event poster series — typography hierarchy and original illustration.',  thumb:'', pdf:'' },
+    { id:'3', title_id:'Branding & Identitas Visual', title_en:'Branding & Visual Identity',   cat:'branding',  desc_id:'Desain logo, panduan warna, tipografi, dan sistem identitas visual lengkap.',       desc_en:'Logo design, color guide, typography, and full visual identity system.',            thumb:'', pdf:'' },
   ];
+  let PORTFOLIO;
+  try {
+    const stored = JSON.parse(localStorage.getItem('karima_portfolio_v1'));
+    PORTFOLIO = (stored && stored.length) ? stored : PORTFOLIO_DEFAULT;
+  } catch { PORTFOLIO = PORTFOLIO_DEFAULT; }
 
   /* ══ STATE ══ */
   let currentLang = localStorage.getItem('lang') || 'id';
@@ -708,9 +688,37 @@
     document.getElementById('navbar').classList.toggle('scrolled', scrollY > 60));
 
   /* ══ INIT ══ */
+  async function loadPortfolioData() {
+    // 1. Coba dari Gist raw URL (tidak butuh auth)
+    try {
+      const cfg = JSON.parse(localStorage.getItem('karima_gist_cfg') || '{}');
+      if (cfg.username && cfg.gistId) {
+        const url = `https://gist.githubusercontent.com/${cfg.username}/${cfg.gistId}/raw/portfolio-data.json?t=${Date.now()}`;
+        const r = await fetch(url);
+        if (r.ok) {
+          const d = await r.json();
+          const items = d.items || d;
+          if (Array.isArray(items) && items.length) {
+            PORTFOLIO = items;
+            renderPills(); renderGrid();
+            return;
+          }
+        }
+      }
+    } catch {}
+    // 2. Fallback localStorage
+    try {
+      const stored = JSON.parse(localStorage.getItem('karima_portfolio_v1'));
+      if (stored && stored.length) { PORTFOLIO = stored; renderPills(); renderGrid(); return; }
+    } catch {}
+    // 3. Default placeholder
+    renderPills(); renderGrid();
+  }
+
   renderPills();
   renderGrid();
   setLang(currentLang);
+  loadPortfolioData();
 </script>
 </body>
 </html>
