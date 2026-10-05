@@ -237,14 +237,6 @@
     .confirm-modal p  { color:var(--muted); font-size:.85rem; margin-bottom:24px; line-height:1.65; }
     .confirm-actions  { display:flex; gap:10px; justify-content:center; }
 
-    /* ── EXPORT CODE MODAL ── */
-    .export-code {
-      font-family:'Courier New', monospace; font-size:.75rem; line-height:1.6;
-      background:var(--surface2); border:1px solid var(--border);
-      border-radius:10px; padding:16px; white-space:pre-wrap; word-break:break-all;
-      max-height:300px; overflow-y:auto; color:#86efac; user-select:all;
-    }
-    .export-note { font-size:.78rem; color:var(--muted); line-height:1.65; }
 
     /* ── TOAST ── */
     .toast { position:fixed; bottom:28px; right:28px; z-index:9999; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:12px 20px; font-size:.83rem; font-weight:600; display:flex; align-items:center; gap:8px; transform:translateY(80px); opacity:0; transition:.3s cubic-bezier(.34,1.56,.64,1); pointer-events:none; }
@@ -360,7 +352,6 @@
         <div id="p-filter-pills"></div>
       </div>
       <div class="toolbar-right">
-        <button class="btn btn-export" onclick="exportCode()">{'}'} Export Kode</button>
         <button class="btn btn-primary" onclick="openPModal()">+ Tambah Karya</button>
       </div>
     </div>
@@ -525,23 +516,6 @@
   </div>
 </div>
 
-<!-- EXPORT CODE MODAL -->
-<div class="modal-overlay" id="export-modal" onclick="if(event.target===this)closeExport()">
-  <div class="modal">
-    <div class="modal-head">
-      <h3>Export Kode Portfolio</h3>
-      <button class="modal-close" onclick="closeExport()">✕</button>
-    </div>
-    <div class="modal-body">
-      <p class="export-note">Salin kode di bawah ini, lalu tempel ke <code>index.html</code> menggantikan array <code>const PORTFOLIO = [...]</code>.</p>
-      <div class="export-code" id="export-code-content"></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn btn-ghost" onclick="closeExport()">Tutup</button>
-      <button class="btn btn-primary" onclick="copyCode()">Salin ke Clipboard</button>
-    </div>
-  </div>
-</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"><span id="toast-msg"></span></div>
@@ -727,7 +701,7 @@
     document.getElementById('confirm-overlay').classList.add('open');
   }
   document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') { closePModal(); closeKModal(); closeConfirm(); closeExport(); }
+    if (e.key === 'Escape') { closePModal(); closeKModal(); closeConfirm(); }
   });
 
   /* ════════════════════════════════════════
@@ -852,27 +826,6 @@
     showToast('🗑 Karya dihapus', '#ef4444');
   }
 
-  /* ── Export Code ── */
-  function exportCode() {
-    const arr = pData.map(item => ({
-      id:       parseInt(item.id) || item.id,
-      title_id: item.title_id,
-      title_en: item.title_en,
-      cat:      item.cat,
-      desc_id:  item.desc_id,
-      desc_en:  item.desc_en,
-      thumb:    item.thumb,
-      pdf:      item.pdf,
-    }));
-    const code = 'const PORTFOLIO = ' + JSON.stringify(arr, null, 2) + ';';
-    document.getElementById('export-code-content').textContent = code;
-    document.getElementById('export-modal').classList.add('open');
-  }
-  function closeExport() { document.getElementById('export-modal').classList.remove('open'); }
-  function copyCode() {
-    const text = document.getElementById('export-code-content').textContent;
-    navigator.clipboard.writeText(text).then(() => showToast('✓ Tersalin ke clipboard'));
-  }
 
   /* ════════════════════════════════════════
      KPI CRUD
